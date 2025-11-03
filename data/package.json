@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "node-red-contrib-fs-ops": "^1.6.0"
+  }
+}
