@@ -1,0 +1,81 @@
+===== LSTM Model Performance =====
+
+
+===== Per-Sensor Metrics =====
+Sensor                    RMSE       R2        
+--------------------------------------------------
+SSA 4 Schacht UMP (1) 120cm % 2.0535     -6.7339   
+SSA 4 Schacht ec (1) 120cm mS/cm 1.8946     -8.2565   
+SSA 4 Schacht ec (2) 30cm mS/cm 0.9078     0.1736    
+SSA 4 Schacht ec (1) 75cm mS/cm 0.8446     0.3023    
+SSA 4 Schacht temperature (1) 120cm degC 0.7870     -14.4295  
+SSA 4 Schacht vacuum 30cm kPa 0.7121     0.4700    
+SSA 4 Schacht ec (3) 120cm mS/cm 0.7078     0.3855    
+SSA 4 Schacht vacuum 120cm kPa 0.6619     0.4067    
+Weather Station wind direction deg 0.6600     -0.6325   
+URB Lysimeter percolation pump mV 0.6242     0.6951    
+URB Lysimeter temperature control mV 0.6230     0.6160    
+SSA 4 Schacht ec (1) 30cm mS/cm 0.6193     0.4327    
+SSA 4 Schacht UMP (3) 30cm % 0.6160     0.1708    
+SSA 4 Schacht UMP (1) 75cm % 0.5824     0.4496    
+SSA 3 Lysimeter ec 30cm mS/cm 0.5759     0.5087    
+Weather Station wind speed m/s 0.5703     0.1889    
+SSA 3 Lysimeter UMP 120cm % 0.5668     -0.0290   
+SSA 4 Schacht vacuum 75cm kPa 0.5645     0.0189    
+SSA 4 Schacht UMP (2) 30cm % 0.5298     0.3492    
+SSA 4 Schacht UMP (2) 120cm % 0.5111     -0.0852   
+SSA 4 Schacht ec (3) 75cm mS/cm 0.4944     0.3619    
+SSA 4 Schacht UMP (3) 75cm % 0.4885     0.3185    
+SSA 4 Schacht UMP (2) 75cm % 0.4779     0.4733    
+SSA 4 Schacht vacuum 140cm kPa 0.4670     -0.3851   
+SSA 4 Schacht UMP (3) 120cm % 0.4299     -0.0532   
+SSA 4 Schacht temperature (3) 120cm degC 0.4169     0.2036    
+Weather Station air pressure hPa 0.4126     0.6912    
+SSA 4 Schacht temperature (3) 30cm degC 0.4086     0.3082    
+Weather Station radiation W/qm 0.4038     0.6081    
+SSA 3 Lysimeter ec 120cm mS/cm 0.3995     0.4086    
+SSA 3 Lysimeter scale (1) kg 0.3887     0.3384    
+Weather Station UMP (1) ec mS/cm 0.3881     0.3371    
+SSA 3 Lysimeter battery V 0.3846     0.7411    
+SSA 4 Schacht UMP (1) 30cm % 0.3834     0.7282    
+Weather Station temperature (5+) degC 0.3813     0.5940    
+SSA 4 Schacht temperature (2) 120cm degC 0.3758     0.3339    
+SSA 4 Schacht ec (3) 30cm mS/cm 0.3606     0.2224    
+SSA 3 Lysimeter temperature 30cm degC 0.3605     0.3988    
+SSA 3 Lysimeter ec 75cm mS/cm 0.3597     0.5275    
+Weather Station humidity % 0.3580     0.7175    
+SSA 4 Schacht temperature (3) 75cm degC 0.3575     0.4005    
+SSA 3 Lysimeter UMP 30cm % 0.3543     0.2719    
+SSA 4 Schacht temperature (1) 30cm degC 0.3533     0.4124    
+SSA 4 Schacht battery V   0.3490     0.7450    
+Weather Station air temperature degC 0.3474     0.6875    
+Weather Station UMP (1) temperature degC 0.3461     0.3746    
+Weather Station UMP (1) % 0.3406     0.3369    
+SSA 4 Schacht temperature (1) 75cm degC 0.3340     0.4701    
+URB Lysimeter outside tension kPa 0.3286     0.2690    
+SSA 4 Schacht temperature (2) 75cm degC 0.3281     0.4924    
+Weather Station battery V 0.3132     0.5273    
+URB Lysimeter inside tension kPa 0.3100     -9.9995   
+SSA 4 Schacht temperature (2) 30cm degC 0.3063     0.4218    
+SSA 3 Lysimeter temperature 75cm degC 0.3046     0.5366    
+SSA 3 Lysimeter vacuum 75cm kPa 0.2954     -10.8025  
+URB Lysimeter vacuum kPa  0.2951     -9913.2559
+SSA 3 Lysimeter tension 30cm kPa 0.2872     0.3250    
+SSA 3 Lysimeter temperature 120cm degC 0.2784     0.5905    
+URB Lysimeter outside temperature degC 0.2656     0.6178    
+SSA 3 Lysimeter tension 75cm kPa 0.2638     -0.8726   
+URB Lysimeter inside temperature degC 0.2553     0.6388    
+SSA 3 Lysimeter vacuum 120cm kPa 0.2461     -18.9591  
+SSA 3 Lysimeter UMP 75cm % 0.2115     0.5706    
+SSA 3 Lysimeter vacuum 30cm kPa 0.1887     -0.3388   
+SSA 4 Schacht ec (2) 120cm mS/cm 0.1871     -7.5013   
+URB Lysimeter outside tension reference kPa 0.1773     -0.2499   
+SSA 3 Lysimeter tension 120cm kPa 0.1767     -1.3250   
+URB Lysimeter level reference cm 0.1758     -160.2350 
+URB Lysimeter level cm    0.1732     -153.7405 
+SSA 4 Schacht ec (2) 75cm mS/cm 0.1321     -518.4410 
+SSA 4 Schacht discharge (2) l 0.0390     0.0000    
+URB Lysimeter discharge (1) l 0.0339     0.0000    
+SSA 4 Schacht discharge (3) l 0.0327     0.0000    
+Weather Station precipitation mm 0.0306     0.0000    
+SSA 4 Schacht discharge (1) l 0.0217     0.0000    

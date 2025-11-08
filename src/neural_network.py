@@ -1,11 +1,13 @@
+import os
 import pandas as pd
 import torch
 from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import RobustScaler
 import matplotlib.pyplot as plt
+from sklearn.metrics import r2_score
 
-df = pd.read_parquet('data/pivot_data_hourly.parquet')
+df = pd.read_parquet('data/pivot_data_hourly_cleaned.parquet')
 
 print(df.index)
 
@@ -66,14 +68,47 @@ class TimeSeriesDataset(Dataset):
 train_dataset = TimeSeriesDataset(X_seq, Y_seq)
 test_dataset = TimeSeriesDataset(X_test_seq, Y_test_seq)
 
-class LSTMModel(torch.nn.Module):
-    def __init__(self, input_size=X_seq.shape[2], output_size=Y_seq.shape[1], hidden_size=512, num_layers=2, dropout=0.2):
-        super(LSTMModel, self).__init__()
-        self.lstm = torch.nn.LSTM(input_size, hidden_size, num_layers=num_layers, batch_first=True, dropout=dropout)
-        self.fc = torch.nn.Linear(hidden_size, output_size)
+
+class EarlyStopping:
+    def __init__(self, patience=5, min_delta=0, verbose=False, path='checkpoint.pth'):
+        self.patience = patience
+        self.verbose = verbose
+        self.path = path
+        self.min_delta = min_delta
+        self.counter = 0
+        self.best_loss = None
+        self.early_stop = False
+        
+    def __call__(self, val_loss, model):
+        if self.best_loss is None:
+            self.best_loss = val_loss
+            self.save_checkpoint(model)
+        elif val_loss < self.best_loss - self.min_delta:
+            self.best_loss = val_loss
+            self.counter = 0
+            self.save_checkpoint(model)
+        else:
+            self.counter += 1
+            if self.verbose:
+                print(f"EarlyStopping counter: {self.counter} / {self.patience}")
+            if self.counter >= self.patience:
+                self.early_stop = True
+
+    def save_checkpoint(self, model):
+        torch.save(model.state_dict(), self.path)
+        if self.verbose:
+            print(f"Validation loss decreased. Saving model to {self.path}")
+
+class GRUModel(torch.nn.Module):
+    def __init__(self, input_size=X_seq.shape[2], output_size=Y_seq.shape[1], hidden_size=512, num_layers=2, dropout=0.2, bidirectional=False):
+        super(GRUModel, self).__init__()
+        self.gru = torch.nn.GRU(input_size, hidden_size, num_layers=num_layers, batch_first=True, dropout=dropout, bidirectional=bidirectional)
+        self.layer_norm = torch.nn.LayerNorm(hidden_size* (2 if bidirectional else 1))
+        self.fc = torch.nn.Linear(hidden_size* (2 if bidirectional else 1), output_size)
 
     def forward(self, x):
-        out, _ = self.lstm(x)
+        out, _ = self.gru(x)
+        out = self.layer_norm(out)
         out = out[:, -1, :]
         out = self.fc(out)
         return out
@@ -86,7 +121,9 @@ elif torch.backends.mps.is_available():
 else:
     device = torch.device('cpu')
     
-model = LSTMModel(input_size=X_seq.shape[2], output_size=Y_seq.shape[1])
+model = GRUModel(input_size=X_seq.shape[2], output_size=Y_seq.shape[1], bidirectional=True)
+early_stopping = EarlyStopping(patience=3, verbose=True, path='best_model.pth')
+
 print("Neural network:", model)
 model = model.to(device)
 
@@ -97,9 +134,9 @@ train_loader = DataLoader(train_dataset, batch_size=32, shuffle=False)
 test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
 
 criterion = torch.nn.MSELoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+optimizer = torch.optim.AdamW(model.parameters(), lr=0.001)
 
-EPOCHS = 15
+EPOCHS = 25
 
 for epoch in range(EPOCHS):
     model.train()
@@ -112,13 +149,26 @@ for epoch in range(EPOCHS):
         loss.backward()
         optimizer.step()
         epoch_loss += loss.item()
-    print(f"Epoch {epoch+1}/{EPOCHS}, Loss: {epoch_loss/len(train_loader)}")
+    val_loss = 0
+    model.eval()
+    with torch.no_grad():
+        for inputs, targets in test_loader:
+            inputs, targets = inputs.to(device), targets.to(device)
+            outputs = model(inputs)
+            loss = criterion(outputs, targets)
+            val_loss += loss.item()
+    print(f"Epoch {epoch+1}/{EPOCHS}, Loss: {epoch_loss/len(train_loader)}, Val Loss: {val_loss/len(test_loader)}")
 print("Training complete.")
 
-if(torch.save(model.state_dict(), "models/neural_networks/lstm_model.pth")):
-    print("Model saved as lstm_model.pth")
-else:
-    print("Error saving the model.")
+model_path = "models/neural_networks/gru_model.pth"
+try:
+    torch.save(model.state_dict(), model_path)
+    if os.path.exists(model_path):
+        print("Model saved successfully!")
+    else:
+        print("Error: Model file not found after saving.")
+except Exception as e:
+    print(f"Error saving the model: {e}")
 
 model.eval()
 test_losses = []
@@ -151,11 +201,24 @@ max_loss_value = mse_per_sensor[max_loss_idx]
 
 print(f"Sensor column with highest loss: {Y_test.columns[max_loss_idx]} (Loss: {max_loss_value:.4f})")
 
-from sklearn.metrics import r2_score
-# If you want to print all losses per column:
+output_path = "GRU_model_performance.txt"
+metrics = []
+
 for idx, loss in enumerate(mse_per_sensor):
     rmse = np.sqrt(loss)
     r2 = r2_score(actuals[:, idx], predictions[:, idx])
-    print(f"{Y.columns[idx]}: RMSE = {rmse:.4f}, R2 = {r2:.4f}")
+    metrics.append((Y.columns[idx], rmse, r2))
+    
+metric_sorted = sorted(metrics, key=lambda x: x[1], reverse=True)
+
+
+with open(output_path, "w") as f:
+    f.write("===== GRU Model Performance =====\n\n")
+    f.write("\n===== Per-Sensor Metrics =====\n")
+    f.write(f"{'Sensor':<25} {'RMSE':<10} {'R2':<10}\n")
+    f.write("-" * 50 + "\n")
+    for name, rmse, r2 in metric_sorted:
+        f.write(f"{name:<25} {rmse:<10.4f} {r2:<10.4f}\n")        
+            
 
 
