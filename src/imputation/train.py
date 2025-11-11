@@ -1,3 +1,4 @@
+import random
 from matplotlib import pyplot as plt
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
@@ -7,19 +8,23 @@ from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
 import numpy as np
 from tqdm import tqdm
-from utils import create_imputation_sequences, prepare_data, remove_outliers_iqr
+from utils import create_imputation_sequences, prepare_data, random_mask, remove_outliers_iqr
 from model import GRU_Imputation
 from dataset import ImputationDataset
-
-# Load data
-df = pd.read_parquet("data/pivot_data.parquet")
 import os
+
+    
 os.makedirs("models", exist_ok=True)
 
+random.seed(42)
+np.random.seed(42)
+torch.manual_seed(42)
+if torch.cuda.is_available():
+    torch.cuda.manual_seed_all(42)
+
+df = pd.read_parquet("data/pivot_data.parquet")
 SEQ_LEN = 24
-
 X, M, y, target_masks, scaler, mask, df = prepare_data("data/pivot_data.parquet", SEQ_LEN)
-
 
 print(f"X shape: {X.shape}")  # (samples, seq_len, features)
 print(f"M shape: {M.shape}")  # (samples, seq_len, features) 
@@ -39,6 +44,8 @@ X_train_final, X_val, M_train_final, M_val, y_train_final, y_val, tm_train_final
     X_train, M_train, y_train, tm_train, test_size=0.2, random_state=42, shuffle=False
 )
 
+X_train_masked, added_mask = random_mask(X_train_final, missing_rate=0.2, seed=42)
+M_train_final = np.maximum(M_train_final, added_mask)
 print("Final data splits:")
 print(f"Training samples: {len(X_train_final)}")
 print(f"Validation samples: {len(X_val)}")
@@ -93,6 +100,15 @@ print(f"   X.shape[0] * X.shape[1] * X.shape[2] = {X.shape[0]} * {X.shape[1]} * 
 print(f"   This should equal M.size = {M.size}")
 print(f"   Match: {X.shape[0] * X.shape[1] * X.shape[2] == M.size}")
 
+# After random masking and updating the mask
+print("=== RANDOM MASKING (TRAIN SET) ===")
+print(f"X_train_masked shape: {X_train_masked.shape}")
+print(f"NaN in X_train_masked: {np.isnan(X_train_masked).sum()}")
+print(f"M_train_final shape: {M_train_final.shape}")
+print(f"Number of 1s (missing) in M_train_final: {(M_train_final == 1).sum()}")
+print(f"Number of 0s (present) in M_train_final: {(M_train_final == 0).sum()}")
+print(f"Percentage missing in M_train_final: {(M_train_final == 1).sum() / M_train_final.size * 100:.2f}%")
+
 # Initialize model
 input_size = X.shape[2]  # Number of features (75)
 model = GRU_Imputation(input_size=input_size, hidden_size=256, num_layers=3, dropout=0.3)
@@ -105,8 +121,11 @@ print(f"Model: {model}")
 
 model = model.to(device)
 
+print("NaN in y_train_final:", np.isnan(y_train_final).sum())
+print("NaN in X_train_masked:", np.isnan(X_train_masked).sum())
+print("NaN in M_train_final:", np.isnan(M_train_final).sum())
 # Create datasets
-train_dataset = ImputationDataset(X_train_final, M_train_final, y_train_final, tm_train_final)
+train_dataset = ImputationDataset(X_train_masked, M_train_final, y_train_final, tm_train_final)
 val_dataset = ImputationDataset(X_val, M_val, y_val, tm_val)
 test_dataset = ImputationDataset(X_test, M_test, y_test, tm_test)
 
@@ -122,7 +141,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-5)
 scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=5, factor=0.5)
 
 # Training parameters
-epochs = 15
+epochs = 25
 best_loss = float('inf')
 patience = 3  # Early stopping patience
 patience_counter = 0  # Counter for patience
@@ -186,14 +205,19 @@ def train_model(
         model.eval()
         val_loss = 0.0
         num_val_batches = 0
-        val_pbar = tqdm(val_loader, desc=f'Epoch {epoch+1}/{epochs} [Val]', leave=False)
         with torch.no_grad():
+            val_pbar = tqdm(val_loader, desc="Validation")
             for batch_data in val_pbar:
                 X_batch, M_batch, y_batch, tm_batch = batch_data
                 X_batch = X_batch.to(device)
                 M_batch = M_batch.to(device)
                 y_batch = y_batch.to(device)
                 tm_batch = tm_batch.to(device)
+                
+                if torch.isnan(X_batch).any():
+                    print("NaN in X_batch!")
+                if torch.isnan(y_batch).any():
+                    print("NaN in y_batch!")
 
                 outputs = model(X_batch, M_batch)
                 missing_mask = tm_batch

@@ -65,3 +65,10 @@ def prepare_data(filepath, seq_len):
     mask_data = mask.values
     X, M, y, target_masks = create_imputation_sequences(data, mask_data, seq_len)
     return X, M, y, target_masks, scaler, mask, df
+
+def random_mask(data, missing_rate=0.1, seed=None):
+    np.random.seed(seed)
+    mask = np.random.rand(*data.shape) < missing_rate
+    data_masked = data.copy()
+    data_masked[mask] = 0.0
+    return data_masked, mask.astype(int)
