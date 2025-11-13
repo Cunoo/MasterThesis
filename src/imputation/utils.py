@@ -35,6 +35,15 @@ def remove_outliers_iqr(df, factor=1.5):
 
 def prepare_data(filepath, seq_len):
     df = pd.read_parquet(filepath)
+    
+    time_index = pd.to_datetime(df.index)
+    day_of_year = time_index.dayofyear.to_numpy()
+    hour_of_day = time_index.hour.to_numpy()
+    df["sin_doy"] = np.sin(2 * np.pi * day_of_year / 365.0)
+    df["cos_doy"] = np.cos(2 * np.pi * day_of_year / 365.0)
+    df["sin_hour"] = np.sin(2 * np.pi * hour_of_day / 24.0)
+    df["cos_hour"] = np.cos(2 * np.pi * hour_of_day / 24.0)
+    
     print("df before cleaning:")
     print(df.isna().sum())
     print(f"Before cleaning - NaN: {df.isna().sum().sum()}")
