@@ -136,3 +136,21 @@ for i, col in enumerate(cols_to_plot):
 
 plt.suptitle('Actual vs Imputed Values for Missing Data (3 Columns)', fontsize=16, y=1.05)
 plt.show()
+
+
+cols_to_plot_art = [3, 14, 69]
+plt.figure(figsize=(18, 5))
+for i, col in enumerate(cols_to_plot_art):
+    idx = flags_art[:, col] == 1  # umelo skryté
+    if idx.sum() == 0:
+        continue
+    plt.subplot(1, 3, i+1)
+    plt.scatter(np.arange(idx.sum()), targs_art[idx, col], color='tab:blue', label='Actual', alpha=0.7, s=20)
+    plt.scatter(np.arange(idx.sum()), preds_art[idx, col], color='tab:orange', label='Imputed', alpha=0.7, s=20)
+    plt.title(f'Artificially masked {df.columns[col]}')
+    plt.xlabel('Index')
+    plt.ylabel('Scaled Value')
+    plt.legend()
+    plt.tight_layout()
+plt.suptitle('Actual vs Imputed (Artificially Masked)', fontsize=16, y=1.05)
+plt.show()
