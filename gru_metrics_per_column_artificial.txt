@@ -1,0 +1,80 @@
+Column	RMSE	MAE	R2
+SSA 3 Lysimeter UMP 120cm %	0.0830	0.0495	0.7391
+SSA 3 Lysimeter UMP 30cm %	0.0455	0.0287	0.8717
+SSA 3 Lysimeter UMP 75cm %	0.0529	0.0338	0.8553
+SSA 3 Lysimeter battery V	0.1059	0.0664	0.7910
+SSA 3 Lysimeter ec 120cm mS/cm	0.1457	0.0960	0.6746
+SSA 3 Lysimeter ec 30cm mS/cm	0.1301	0.1002	0.7316
+SSA 3 Lysimeter ec 75cm mS/cm	0.1214	0.0933	0.7759
+SSA 3 Lysimeter scale (1) kg	0.0937	0.0503	0.7754
+SSA 3 Lysimeter temperature 120cm degC	0.0308	0.0221	0.9505
+SSA 3 Lysimeter temperature 30cm degC	0.0317	0.0228	0.9521
+SSA 3 Lysimeter temperature 75cm degC	0.0278	0.0182	0.9607
+SSA 3 Lysimeter tension 120cm kPa	0.0589	0.0430	0.9237
+SSA 3 Lysimeter tension 30cm kPa	0.0781	0.0505	0.8945
+SSA 3 Lysimeter tension 75cm kPa	0.0635	0.0432	0.9151
+SSA 3 Lysimeter vacuum 120cm kPa	0.0614	0.0379	0.9370
+SSA 3 Lysimeter vacuum 30cm kPa	0.0766	0.0397	0.8835
+SSA 3 Lysimeter vacuum 75cm kPa	0.0606	0.0412	0.9170
+SSA 4 Schacht UMP (1) 120cm %	0.2036	0.1117	0.1843
+SSA 4 Schacht UMP (1) 30cm %	0.0907	0.0592	0.8217
+SSA 4 Schacht UMP (1) 75cm %	0.0709	0.0428	0.8758
+SSA 4 Schacht UMP (2) 120cm %	0.0595	0.0357	0.8351
+SSA 4 Schacht UMP (2) 30cm %	0.2194	0.1044	0.0566
+SSA 4 Schacht UMP (2) 75cm %	0.0551	0.0321	0.8840
+SSA 4 Schacht UMP (3) 120cm %	0.0736	0.0397	0.7159
+SSA 4 Schacht UMP (3) 30cm %	0.0916	0.0507	0.8076
+SSA 4 Schacht UMP (3) 75cm %	0.0661	0.0385	0.8170
+SSA 4 Schacht battery V	0.1030	0.0650	0.7716
+SSA 4 Schacht discharge (1) l	0.0019	0.0014	0.0000
+SSA 4 Schacht discharge (2) l	0.0009	0.0007	0.0000
+SSA 4 Schacht discharge (3) l	0.0008	0.0006	0.0000
+SSA 4 Schacht ec (1) 120cm mS/cm	0.1948	0.1087	0.0869
+SSA 4 Schacht ec (1) 30cm mS/cm	0.0911	0.0609	0.7550
+SSA 4 Schacht ec (1) 75cm mS/cm	0.1105	0.0727	0.7240
+SSA 4 Schacht ec (2) 120cm mS/cm	0.1311	0.0761	0.3209
+SSA 4 Schacht ec (2) 30cm mS/cm	0.1898	0.1002	0.3781
+SSA 4 Schacht ec (2) 75cm mS/cm	0.0871	0.0459	0.7863
+SSA 4 Schacht ec (3) 120cm mS/cm	0.1292	0.0804	0.5090
+SSA 4 Schacht ec (3) 30cm mS/cm	0.1132	0.0612	0.7482
+SSA 4 Schacht ec (3) 75cm mS/cm	0.0692	0.0491	0.8425
+SSA 4 Schacht temperature (1) 120cm degC	0.3662	0.1856	-0.2461
+SSA 4 Schacht temperature (1) 30cm degC	0.0481	0.0252	0.8939
+SSA 4 Schacht temperature (1) 75cm degC	0.0520	0.0296	0.9162
+SSA 4 Schacht temperature (2) 120cm degC	0.0497	0.0287	0.9184
+SSA 4 Schacht temperature (2) 30cm degC	0.2600	0.1127	0.0368
+SSA 4 Schacht temperature (2) 75cm degC	0.0544	0.0341	0.9085
+SSA 4 Schacht temperature (3) 120cm degC	0.0547	0.0345	0.9101
+SSA 4 Schacht temperature (3) 30cm degC	0.1148	0.0475	0.5732
+SSA 4 Schacht temperature (3) 75cm degC	0.0550	0.0336	0.9074
+SSA 4 Schacht vacuum 120cm kPa	0.1128	0.0745	0.4915
+SSA 4 Schacht vacuum 140cm kPa	0.0962	0.0583	0.5258
+SSA 4 Schacht vacuum 30cm kPa	0.1031	0.0661	0.7626
+SSA 4 Schacht vacuum 75cm kPa	0.1086	0.0753	0.4638
+URB Lysimeter discharge (1) l	0.0026	0.0020	0.0000
+URB Lysimeter inside temperature degC	0.0460	0.0342	0.9287
+URB Lysimeter inside tension kPa	0.0742	0.0494	0.8453
+URB Lysimeter level cm	0.0945	0.0607	0.9287
+URB Lysimeter level reference cm	0.0949	0.0613	0.8733
+URB Lysimeter outside temperature degC	0.0454	0.0317	0.9336
+URB Lysimeter outside tension kPa	0.0788	0.0517	0.8649
+URB Lysimeter outside tension reference kPa	0.0793	0.0517	0.9178
+URB Lysimeter percolation pump mV	0.1253	0.0776	0.8199
+URB Lysimeter temperature control mV	0.1230	0.0719	0.7646
+URB Lysimeter vacuum kPa	0.0859	0.0558	0.8463
+Weather Station UMP (1) %	0.0677	0.0412	0.8148
+Weather Station UMP (1) ec mS/cm	0.1187	0.0719	0.7428
+Weather Station UMP (1) temperature degC	0.0374	0.0238	0.9289
+Weather Station air pressure hPa	0.0670	0.0508	0.8970
+Weather Station air temperature degC	0.0506	0.0391	0.9088
+Weather Station battery V	0.0619	0.0437	0.8479
+Weather Station humidity %	0.0793	0.0612	0.7818
+Weather Station precipitation mm	0.0015	0.0012	0.0000
+Weather Station radiation W/qm	0.1168	0.0737	0.8846
+Weather Station temperature (5+) degC	0.0524	0.0389	0.9239
+Weather Station wind direction deg	0.2638	0.1867	0.3746
+Weather Station wind speed m/s	0.1300	0.0982	0.7560
+sin_doy	0.0913	0.0595	0.9343
+cos_doy	0.0777	0.0545	0.9508
+sin_hour	0.0629	0.0488	0.9683
+cos_hour	0.0728	0.0542	0.9579
