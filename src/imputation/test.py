@@ -118,6 +118,20 @@ for col, feature_name in enumerate(df.columns):
     r2 = r2_score(y_true, y_pred)
     print(f"[{col:02d}] {feature_name} -> RMSE: {rmse:.4f}, MAE: {mae:.4f}, R^2: {r2:.4f}")
 
+with open("gru_metrics_per_column_artificial.txt", "w", encoding="utf-8") as f:
+    f.write("Column\tRMSE\tMAE\tR2\n")
+    for col, feature_name in enumerate(df.columns):
+        col_mask = flags_art[:, col] == 1
+        if not np.any(col_mask):
+            continue
+        y_true = targs_art[col_mask, col]
+        y_pred = preds_art[col_mask, col]
+        rmse = root_mean_squared_error(y_true, y_pred)
+        mae = mean_absolute_error(y_true, y_pred)
+        r2 = r2_score(y_true, y_pred)
+        f.write(f"{feature_name}\t{rmse:.4f}\t{mae:.4f}\t{r2:.4f}\n")
+print("Saved per-column metrics to gru_metrics_per_column_artificial.txt")
+
 # Visualization for 3 columns (NATURAL missing)
 cols_to_plot = [3, 14, 69]
 plt.figure(figsize=(18, 5))

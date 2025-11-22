@@ -67,6 +67,7 @@ def prepare_data(filepath, seq_len):
     print(df_filled.columns.tolist())
     print("DataFrame info:")
     print(df_filled.info())
+    print(df_filled.head())
     scaler = MinMaxScaler()
     scaled_values = scaler.fit_transform(df_filled)
     df_scaled = pd.DataFrame(scaled_values, columns=df_filled.columns, index=df_filled.index)
