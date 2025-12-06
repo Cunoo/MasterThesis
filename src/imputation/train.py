@@ -24,8 +24,7 @@ if torch.cuda.is_available():
 
 df = pd.read_parquet("data/pivot_data.parquet")
 SEQ_LEN = 24
-X, M, y, target_masks, scaler, mask, df = prepare_data("data/pivot_data.parquet", SEQ_LEN)
-
+X, M, y, target_masks, scaler, mask, df, seq_to_orig_idx = prepare_data("data/pivot_data.parquet", SEQ_LEN)
 print(f"X shape: {X.shape}")  # (samples, seq_len, features)
 print(f"M shape: {M.shape}")  # (samples, seq_len, features)
 print(f"y shape: {y.shape}")  # (samples, features) - target to impute
@@ -115,7 +114,7 @@ print(f"Percentage missing in M_train_final: {(M_train_final == 1).sum() / M_tra
 
 # Initialize model
 input_size = X.shape[2]  # Number of features
-model = GRU_Imputation(input_size=input_size, hidden_size=512, num_layers=3, dropout=0.3)
+model = GRU_Imputation(input_size=input_size, hidden_size=512, num_layers=3, dropout=0.3, bidirectional=True)
 
 # Device setup
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')

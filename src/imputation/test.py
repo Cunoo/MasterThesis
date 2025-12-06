@@ -13,11 +13,12 @@ SEQ_LEN = 24
 ART_RATE = 0.10  # fraction of artificially masked known targets at the last time step
 
 # Data
-X, M, y, target_masks, scaler, mask, df = prepare_data("data/pivot_data.parquet", SEQ_LEN)
+X, M, y, target_masks, scaler, mask, df, seq_to_orig_idx = prepare_data("data/pivot_data.parquet", SEQ_LEN)
 
 # Model
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = GRU_Imputation(input_size=X.shape[2], hidden_size=512, num_layers=3, dropout=0.3)
+input_size = X.shape[2]
+model = GRU_Imputation(input_size=input_size, hidden_size=512, num_layers=3, dropout=0.3, bidirectional=True)
 model.load_state_dict(torch.load('models/imputation/imputation_model_gru.pth', map_location=device))
 model = model.to(device)
 model.eval()
@@ -168,3 +169,9 @@ for i, col in enumerate(cols_to_plot_art):
     plt.tight_layout()
 plt.suptitle('Actual vs Imputed (Artificially Masked)', fontsize=16, y=1.05)
 plt.show()
+
+metrics_df = pd.read_csv("gru_metrics_per_column_artificial.txt", sep="\t", encoding="utf-8")
+last_col = metrics_df.columns[-1]
+r2_series = pd.to_numeric(metrics_df[last_col], errors="coerce")
+mean_r2 = r2_series.mean()
+print(f"Mean {last_col}: {mean_r2:.4f}")

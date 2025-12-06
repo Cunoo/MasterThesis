@@ -33,8 +33,9 @@ def remove_outliers_iqr(df, factor=1.5):
     return df_out
 
 
-def prepare_data(filepath, seq_len):
+def prepare_data(filepath, seq_len, impute_mode=False):
     df = pd.read_parquet(filepath)
+    
     
     time_index = pd.to_datetime(df.index)
     day_of_year = time_index.dayofyear.to_numpy()
@@ -48,33 +49,51 @@ def prepare_data(filepath, seq_len):
     print(df.isna().sum())
     print(f"Before cleaning - NaN: {df.isna().sum().sum()}")
     print(f"Before cleaning - Inf: {np.isinf(df.values).sum()}")
+    
     mask = df.isna().astype(int)
-    df_filled = df.copy()
-    df_filled = df_filled.interpolate(method='linear', limit=3, limit_direction='both')
-    df_filled = df_filled.ffill(limit=5)
-    df_filled = df_filled.bfill(limit=5)
-    df_filled = df_filled.fillna(df_filled.mean())
-    df_filled = df_filled.fillna(0)
-    df_filled = df_filled.replace([np.inf, -np.inf], 0)
-    df_filled = remove_outliers_iqr(df_filled, factor=1.5)
-    print(f"After cleaning - NaN: {df_filled.isna().sum().sum()}")
-    print(f"After cleaning - Inf: {np.isinf(df_filled.values).sum()}")
+    
+    if impute_mode:
+        df_filled = df.copy()
+        df_filled = df_filled.interpolate(method='linear', limit=3, limit_direction='both')
+        df_filled = df_filled.ffill(limit=5)
+        df_filled = df_filled.bfill(limit=5)
+        df_filled = df_filled.fillna(df_filled.mean())
+        df_filled = df_filled.replace(0, 0.001)
+        df_filled = df_filled.replace([np.inf, -np.inf], 0)
+        print(f"After cleaning - NaN: {df_filled.isna().sum().sum()}")
+    else:
+        df_filled = df.copy()
+        df_filled = df_filled.interpolate(method='linear', limit=3, limit_direction='both')
+        df_filled = df_filled.ffill(limit=5)
+        df_filled = df_filled.bfill(limit=5)
+        df_filled = df_filled.fillna(df_filled.mean())
+        df_filled = df_filled.replace(0, 0.001)
+        df_filled = df_filled.replace([np.inf, -np.inf], 0)
+        df_filled = remove_outliers_iqr(df_filled, factor=1.5)
+        print(f"After cleaning - NaN: {df_filled.isna().sum().sum()}")
     
     print("Data cleaning successful!")
-
-
     print("Columns in df_filled:")
     print(df_filled.columns.tolist())
     print("DataFrame info:")
     print(df_filled.info())
     print(df_filled.head())
+    
     scaler = MinMaxScaler()
     scaled_values = scaler.fit_transform(df_filled)
     df_scaled = pd.DataFrame(scaled_values, columns=df_filled.columns, index=df_filled.index)
     data = df_scaled.values
     mask_data = mask.values
     X, M, y, target_masks = create_imputation_sequences(data, mask_data, seq_len)
-    return X, M, y, target_masks, scaler, mask, df
+    
+    # Mapovanie sekvencie na pôvodnú pozíciu
+    sequence_to_original_idx = []
+    for i in range(len(data) - seq_len):
+        original_idx = i + seq_len - 1  # Posledný čas v sekvencii
+        sequence_to_original_idx.append(original_idx)
+    
+    return X, M, y, target_masks, scaler, mask, df, np.array(sequence_to_original_idx)
+
 
 def random_mask(data, missing_rate=0.1, seed=None):
     np.random.seed(seed)
