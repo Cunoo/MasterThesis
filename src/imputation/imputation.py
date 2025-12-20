@@ -10,8 +10,8 @@ from sklearn.preprocessing import MinMaxScaler
 from tqdm import tqdm
 from matplotlib import pyplot as plt
 import random
-
-SEQ_LEN = 24
+import model_param
+SEQ_LEN = model_param.SEQ_LEN
 
 # Load and prepare data
 print("Loading and preparing data...")
@@ -21,14 +21,14 @@ X, M, y, target_masks, scaler, mask, df, seq_to_orig_idx = prepare_data("data/pi
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"Using device: {device}")
 input_size = X.shape[2]
-model = GRU_Imputation(input_size=input_size, hidden_size=512, num_layers=3, dropout=0.3, bidirectional=True)
+model = GRU_Imputation(input_size=input_size, hidden_size=model_param.hidden_size, num_layers=model_param.num_layers, dropout=model_param.dropout)
 model.load_state_dict(torch.load('models/imputation/imputation_model_gru.pth', map_location=device))
 model = model.to(device)
 model.eval()
 
 # Prepare data for imputation
 test_dataset = ImputationDataset(X, M, y, target_masks)
-test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
+test_loader = DataLoader(test_dataset, batch_size=256, shuffle=False)
 
 # Collect all imputed values
 all_predictions = []

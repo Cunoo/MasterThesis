@@ -1,9 +1,10 @@
 import numpy as np
 import pandas as pd
+from sklearn.discriminant_analysis import StandardScaler
 from sklearn.preprocessing import MinMaxScaler
 def create_imputation_sequences(data, mask, seq_len):
     xs, ms, ys, target_masks = [], [], [], []
-    for i in range(len(data) - seq_len):
+    for i in range(len(data) - seq_len + 1):
         x = data[i:i+seq_len]  # Input sequence
         m = mask[i:i+seq_len]  # Mask sequence
         
@@ -33,10 +34,12 @@ def remove_outliers_iqr(df, factor=1.5):
     return df_out
 
 
-def prepare_data(filepath, seq_len, impute_mode=False):
+def prepare_data(filepath, seq_len, scaler=None, fit_scaler: bool = True, impute_mode: bool = False, verbose: bool = True):
     df = pd.read_parquet(filepath)
-    
-    
+    df = df.replace([np.inf, -np.inf], np.nan)
+    df = remove_outliers_iqr(df, factor=1.5)
+
+    # Časové features
     time_index = pd.to_datetime(df.index)
     day_of_year = time_index.dayofyear.to_numpy()
     hour_of_day = time_index.hour.to_numpy()
@@ -44,55 +47,62 @@ def prepare_data(filepath, seq_len, impute_mode=False):
     df["cos_doy"] = np.cos(2 * np.pi * day_of_year / 365.0)
     df["sin_hour"] = np.sin(2 * np.pi * hour_of_day / 24.0)
     df["cos_hour"] = np.cos(2 * np.pi * hour_of_day / 24.0)
-    
-    print("df before cleaning:")
-    print(df.isna().sum())
-    print(f"Before cleaning - NaN: {df.isna().sum().sum()}")
-    print(f"Before cleaning - Inf: {np.isinf(df.values).sum()}")
-    
+
+    # Mask = kde sú NaN
     mask = df.isna().astype(int)
-    
-    if impute_mode:
-        df_filled = df.copy()
-        df_filled = df_filled.interpolate(method='linear', limit=3, limit_direction='both')
-        df_filled = df_filled.ffill(limit=5)
-        df_filled = df_filled.bfill(limit=5)
-        df_filled = df_filled.fillna(df_filled.mean())
-        df_filled = df_filled.replace(0, 0.001)
-        df_filled = df_filled.replace([np.inf, -np.inf], 0)
-        print(f"After cleaning - NaN: {df_filled.isna().sum().sum()}")
+    values = df.to_numpy(dtype=float)
+
+    if fit_scaler:
+        # Použijeme StandardScaler
+        scaler = StandardScaler()
+        
+        # StandardScaler nezvláda NaN pri fit().
+        # Vypočítame mean a std manuálne ignorujúc NaN a nastavíme ich do scalera.
+        mean = np.nanmean(values, axis=0)
+        std = np.nanstd(values, axis=0)
+        
+        # Ošetrenie nulovej smerodajnej odchýlky (konštantné stĺpce)
+        std[std == 0] = 1.0
+        
+        scaler.mean_ = mean
+        scaler.scale_ = std
+        scaler.var_ = std ** 2
+        scaler.n_samples_seen_ = np.sum(~np.isnan(values), axis=0)
+        
     else:
-        df_filled = df.copy()
-        df_filled = df_filled.interpolate(method='linear', limit=3, limit_direction='both')
-        df_filled = df_filled.ffill(limit=5)
-        df_filled = df_filled.bfill(limit=5)
-        df_filled = df_filled.fillna(df_filled.mean())
-        df_filled = df_filled.replace(0, 0.001)
-        df_filled = df_filled.replace([np.inf, -np.inf], 0)
-        df_filled = remove_outliers_iqr(df_filled, factor=1.5)
-        print(f"After cleaning - NaN: {df_filled.isna().sum().sum()}")
+        if scaler is None:
+            raise ValueError("prepare_data(..., fit_scaler=False) requires passing an existing scaler")
+
+    # Transformácia
+    # StandardScaler.transform() tiež nezvláda NaN, musíme to obísť
+    # (x - mean) / std
     
-    print("Data cleaning successful!")
-    print("Columns in df_filled:")
-    print(df_filled.columns.tolist())
-    print("DataFrame info:")
-    print(df_filled.info())
-    print(df_filled.head())
+    # Manuálna transformácia pre rýchlosť a podporu NaN
+    scaled_values = (values - scaler.mean_) / scaler.scale_
     
-    scaler = MinMaxScaler()
-    scaled_values = scaler.fit_transform(df_filled)
-    df_scaled = pd.DataFrame(scaled_values, columns=df_filled.columns, index=df_filled.index)
+    # Nahradíme NaN nulou (čo je priemer v štandardizovaných dátach)
+    # Toto je pre neurónovú sieť bezpečné, lebo 0 = priemer.
+    scaled_values = np.nan_to_num(scaled_values, nan=0.0)
+    
+    df_scaled = pd.DataFrame(scaled_values, columns=df.columns, index=df.index)
+
+    # Kontrola rozsahu
+    if verbose and fit_scaler:
+        print("Min after scaling:", df_scaled.min().min())
+        print("Max after scaling:", df_scaled.max().max())
+        print("Mean after scaling (should be ~0):", df_scaled.mean().mean())
+        print("Std after scaling (should be ~1):", df_scaled.std().mean())
+
     data = df_scaled.values
     mask_data = mask.values
+
+    # Vytvorenie sekvencií pre GRU/ANN
     X, M, y, target_masks = create_imputation_sequences(data, mask_data, seq_len)
-    
-    # Mapovanie sekvencie na pôvodnú pozíciu
-    sequence_to_original_idx = []
-    for i in range(len(data) - seq_len):
-        original_idx = i + seq_len - 1  # Posledný čas v sekvencii
-        sequence_to_original_idx.append(original_idx)
-    
-    return X, M, y, target_masks, scaler, mask, df, np.array(sequence_to_original_idx)
+
+    sequence_to_original_idx = np.arange(seq_len - 1, len(data))
+
+    return X, M, y, target_masks, scaler, mask, df, sequence_to_original_idx
+
 
 
 def random_mask(data, missing_rate=0.1, seed=None):
