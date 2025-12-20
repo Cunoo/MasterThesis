@@ -3,34 +3,62 @@ import pandas as pd
 import torch
 import torch.nn as nn
 import numpy as np
+import os
+import pickle
 from utils import prepare_data
 from model import GRU_Imputation
 from dataset import ImputationDataset
 from torch.utils.data import DataLoader
 from sklearn.metrics import root_mean_squared_error, mean_absolute_error, r2_score
+import model_param as model_param
 
-SEQ_LEN = 24
-ART_RATE = 0.10  # fraction of artificially masked known targets at the last time step
+# Nastavenia
+SEQ_LEN = model_param.SEQ_LEN
+ART_RATE = 0.15  # Pomer umelo maskovaných hodnôt pre test presnosti
+torch.manual_seed(42) # Fixný seed pre reprodukovateľnosť testu
+np.random.seed(42)
 
-# Data
-X, M, y, target_masks, scaler, mask, df, seq_to_orig_idx = prepare_data("data/pivot_data.parquet", SEQ_LEN)
+# 1. Načítanie dát
+print("Loading data and preparing sequences...")
 
-# Model
+scaler_path = os.path.join("models", "imputation", "scaler.pkl")
+if not os.path.exists(scaler_path):
+    raise FileNotFoundError(
+        f"Scaler not found at {scaler_path}. Run train.py first to generate it."
+    )
+
+with open(scaler_path, "rb") as f:
+    scaler = pickle.load(f)
+
+# Načítanie testovacích dát (fit_scaler=False, použijeme načítaný scaler)
+X, M, y, target_masks, _, mask, df, seq_to_orig_idx = prepare_data(
+    "data/pivot_test.parquet", SEQ_LEN, scaler=scaler, fit_scaler=False, verbose=False
+)
+
+# 2. Inicializácia a načítanie modelu
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 input_size = X.shape[2]
-model = GRU_Imputation(input_size=input_size, hidden_size=512, num_layers=3, dropout=0.3, bidirectional=True)
-model.load_state_dict(torch.load('models/imputation/imputation_model_gru.pth', map_location=device))
+model = GRU_Imputation(input_size=input_size, hidden_size=model_param.hidden_size, num_layers=model_param.num_layers, dropout=model_param.dropout)
+
+model_path = 'models/imputation/imputation_model_gru.pth'
+if os.path.exists(model_path):
+    model.load_state_dict(torch.load(model_path, map_location=device))
+    print(f"Model loaded from {model_path}")
+else:
+    print("Error: Model file not found!")
+    exit()
+
 model = model.to(device)
 model.eval()
 
-# Loader
+# 3. Príprava DataLoader-a
 test_dataset = ImputationDataset(X, M, y, target_masks)
-test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
+test_loader = DataLoader(test_dataset, batch_size=256, shuffle=False)
 
-# Evaluate test loss on natural missing
-test_loss = 0.0
-test_batches = 0
-criterion = nn.HuberLoss(delta=0.05)
+# 4. Inferenčný cyklus (Artificial Masking Test)
+all_preds_scaled, all_targs_scaled, all_flags_art = [], [], []
+
+print("Running inference on test set with artificial masking...")
 with torch.no_grad():
     for X_batch, M_batch, y_batch, tm_batch in test_loader:
         X_batch = X_batch.to(device)
@@ -38,140 +66,101 @@ with torch.no_grad():
         y_batch = y_batch.to(device)
         tm_batch = tm_batch.to(device)
 
-        outputs = model(X_batch, M_batch)
-        miss_mask = tm_batch  # 1 = missing at the last time step
-        if miss_mask.sum() > 0:
-            loss = criterion(outputs[miss_mask == 1], y_batch[miss_mask == 1])
-            test_loss += loss.item()
-            test_batches += 1
-
-avg_test_loss = test_loss / test_batches if test_batches > 0 else float('inf')
-print(f"Test Loss (natural missing): {avg_test_loss:.6f}")
-
-# NATURAL missing metrics
-all_predictions, all_targets, all_masks = [], [], []
-with torch.no_grad():
-    for X_batch, M_batch, y_batch, tm_batch in test_loader:
-        X_batch = X_batch.to(device)
-        M_batch = M_batch.to(device)
-        y_batch = y_batch.to(device)
-        tm_batch = tm_batch.to(device)
-        outputs = model(X_batch, M_batch)
-        all_predictions.append(outputs.cpu().numpy())
-        all_targets.append(y_batch.cpu().numpy())
-        all_masks.append(tm_batch.cpu().numpy())
-
-predictions = np.concatenate(all_predictions, axis=0)
-targets = np.concatenate(all_targets, axis=0)
-masks = np.concatenate(all_masks, axis=0)
-
-print("\n=== Metrics on NATURAL missing values (original NaNs) ===")
-for col, feature_name in enumerate(df.columns):
-    col_mask = masks[:, col] == 1
-    if not np.any(col_mask):
-        continue
-    y_true = targets[col_mask, col]
-    y_pred = predictions[col_mask, col]
-    rmse = root_mean_squared_error(y_true, y_pred)
-    mae = mean_absolute_error(y_true, y_pred)
-    r2 = r2_score(y_true, y_pred)
-    print(f"[{col:02d}] {feature_name} -> RMSE: {rmse:.4f}, MAE: {mae:.4f}, R^2: {r2:.4f}")
-
-# ARTIFICIAL missing metrics
-all_preds_art, all_targs_art, all_flags_art = [], [], []
-with torch.no_grad():
-    for X_batch, M_batch, y_batch, tm_batch in test_loader:
-        X_batch = X_batch.to(device)
-        M_batch = M_batch.to(device)
-        y_batch = y_batch.to(device)
-        tm_batch = tm_batch.to(device)
-
-        present = (tm_batch == 0)  # positions where the target is known
+        # Vytvorenie umelej masky len na pozíciách, ktoré v realite poznáme (tm_batch == 0)
+        present = (tm_batch == 0)
         rand = torch.rand_like(present.float())
-        art_mask = (rand < ART_RATE) & present  # artificially missing at the last time step
+        art_mask = (rand < ART_RATE) & present
 
         X_masked = X_batch.clone()
         M_masked = M_batch.clone()
+        
+        # Aplikácia masky: X nastavíme na 0 (priemer), M nastavíme na 1
         if art_mask.any():
-            # convention: missing => X=0, M=1
             X_masked[:, -1, :] = torch.where(art_mask, torch.zeros_like(X_masked[:, -1, :]), X_masked[:, -1, :])
             M_masked[:, -1, :] = torch.where(art_mask, torch.ones_like(M_masked[:, -1, :]), M_masked[:, -1, :])
 
         outputs = model(X_masked, M_masked)
 
-        all_preds_art.append(outputs.cpu().numpy())
-        all_targs_art.append(y_batch.cpu().numpy())
+        all_preds_scaled.append(outputs.cpu().numpy())
+        all_targs_scaled.append(y_batch.cpu().numpy())
         all_flags_art.append(art_mask.cpu().numpy().astype(np.uint8))
 
-preds_art = np.concatenate(all_preds_art, axis=0)
-targs_art = np.concatenate(all_targs_art, axis=0)
+# Spojenie výsledkov
+preds_scaled = np.concatenate(all_preds_scaled, axis=0)
+targs_scaled = np.concatenate(all_targs_scaled, axis=0)
 flags_art = np.concatenate(all_flags_art, axis=0)
 
-print("\n=== Metrics on ARTIFICIALLY masked, known values (last step) ===")
+# 5. INVERZNÁ TRANSFORMÁCIA (Návrat k reálnym jednotkám)
+print("Inverting scale to real-world units...")
+
+# Bezpečná manuálna inverzia pre StandardScaler
+if hasattr(scaler, 'mean_') and hasattr(scaler, 'scale_'):
+    # x_orig = x_scaled * std + mean
+    preds_orig = preds_scaled * scaler.scale_ + scaler.mean_
+    targs_orig = targs_scaled * scaler.scale_ + scaler.mean_
+else:
+    # Fallback na štandardnú metódu (ak by to bol iný scaler)
+    print("Warning: Scaler attributes not found, using inverse_transform...")
+    preds_orig = scaler.inverse_transform(preds_scaled)
+    targs_orig = scaler.inverse_transform(targs_scaled)
+
+# 6. Výpočet metrík na reálnych hodnotách
+print("\n" + "="*60)
+print(f"{'Feature Name':<30} | {'RMSE':<8} | {'MAE':<8} | {'R2':<8}")
+print("-" * 60)
+
+results = []
 for col, feature_name in enumerate(df.columns):
     col_mask = flags_art[:, col] == 1
     if not np.any(col_mask):
         continue
-    y_true = targs_art[col_mask, col]
-    y_pred = preds_art[col_mask, col]
+    
+    y_true = targs_orig[col_mask, col]
+    y_pred = preds_orig[col_mask, col]
+    
     rmse = root_mean_squared_error(y_true, y_pred)
     mae = mean_absolute_error(y_true, y_pred)
     r2 = r2_score(y_true, y_pred)
-    print(f"[{col:02d}] {feature_name} -> RMSE: {rmse:.4f}, MAE: {mae:.4f}, R^2: {r2:.4f}")
+    
+    print(f"{feature_name[:30]:<30} | {rmse:8.4f} | {mae:8.4f} | {r2:8.4f}")
+    results.append({"Feature": feature_name, "RMSE": rmse, "MAE": mae, "R2": r2})
 
-with open("gru_metrics_per_column_artificial.txt", "w", encoding="utf-8") as f:
-    f.write("Column\tRMSE\tMAE\tR2\n")
-    for col, feature_name in enumerate(df.columns):
-        col_mask = flags_art[:, col] == 1
-        if not np.any(col_mask):
-            continue
-        y_true = targs_art[col_mask, col]
-        y_pred = preds_art[col_mask, col]
-        rmse = root_mean_squared_error(y_true, y_pred)
-        mae = mean_absolute_error(y_true, y_pred)
-        r2 = r2_score(y_true, y_pred)
-        f.write(f"{feature_name}\t{rmse:.4f}\t{mae:.4f}\t{r2:.4f}\n")
-print("Saved per-column metrics to gru_metrics_per_column_artificial.txt")
+# Uloženie metrík do súboru
+metrics_df = pd.DataFrame(results)
+metrics_df.to_csv("gru_metrics_real_units.txt", sep="\t", index=False)
+print("="*60)
+print(f"Average R2 Score: {metrics_df['R2'].mean():.4f}")
+print("Saved metrics to gru_metrics_real_units.txt")
 
-# Visualization for 3 columns (NATURAL missing)
-cols_to_plot = [3, 14, 69]
-plt.figure(figsize=(18, 5))
+# 7. Vizualizácia výsledkov
+# Vyberieme 3 zaujímavé stĺpce (nie časové features na konci)
+cols_to_plot = [0, 5, 10] 
+# Uistíme sa, že indexy sú v rozsahu
+cols_to_plot = [c for c in cols_to_plot if c < len(df.columns)]
+
+plt.figure(figsize=(18, 6))
+
 for i, col in enumerate(cols_to_plot):
-    idx = masks[:, col] == 1  # only where it was naturally missing
+    idx = flags_art[:, col] == 1
     if idx.sum() == 0:
         continue
+    
     plt.subplot(1, 3, i+1)
-    plt.scatter(np.arange(idx.sum()), targets[idx, col], color='tab:blue', label='Actual', alpha=0.7, s=20)
-    plt.scatter(np.arange(idx.sum()), predictions[idx, col], color='tab:orange', label='Imputed', alpha=0.7, s=20)
-    plt.title(f'Column {df.columns[col]}')
-    plt.xlabel('Missing Value Index')
-    plt.ylabel('Scaled Value')
+    # Zobraziť len prvých 100 bodov pre prehľadnosť
+    plot_limit = 100
+    y_t = targs_orig[idx, col][:plot_limit]
+    y_p = preds_orig[idx, col][:plot_limit]
+    
+    plt.scatter(np.arange(len(y_t)), y_t, color='tab:blue', label='Actual', alpha=0.7, s=30)
+    plt.scatter(np.arange(len(y_p)), y_p, color='tab:orange', label='Imputed', alpha=0.7, s=30)
+    
+    plt.title(f'Feature: {df.columns[col]}')
+    plt.xlabel('Sample Index (Masked points)')
+    plt.ylabel('Real Value')
     plt.legend()
-    plt.tight_layout()
+    plt.grid(True, alpha=0.3)
 
-plt.suptitle('Actual vs Imputed Values for Missing Data (3 Columns)', fontsize=16, y=1.05)
-plt.show()
-
-
-cols_to_plot_art = [3, 14, 69]
-plt.figure(figsize=(18, 5))
-for i, col in enumerate(cols_to_plot_art):
-    idx = flags_art[:, col] == 1  # umelo skryté
-    if idx.sum() == 0:
-        continue
-    plt.subplot(1, 3, i+1)
-    plt.scatter(np.arange(idx.sum()), targs_art[idx, col], color='tab:blue', label='Actual', alpha=0.7, s=20)
-    plt.scatter(np.arange(idx.sum()), preds_art[idx, col], color='tab:orange', label='Imputed', alpha=0.7, s=20)
-    plt.title(f'Artificially masked {df.columns[col]}')
-    plt.xlabel('Index')
-    plt.ylabel('Scaled Value')
-    plt.legend()
-    plt.tight_layout()
-plt.suptitle('Actual vs Imputed (Artificially Masked)', fontsize=16, y=1.05)
-plt.show()
-
-metrics_df = pd.read_csv("gru_metrics_per_column_artificial.txt", sep="\t", encoding="utf-8")
-last_col = metrics_df.columns[-1]
-r2_series = pd.to_numeric(metrics_df[last_col], errors="coerce")
-mean_r2 = r2_series.mean()
-print(f"Mean {last_col}: {mean_r2:.4f}")
+plt.suptitle('Model Performance on Artificially Masked Data (Real Units)', fontsize=16)
+plt.savefig('imputation_test_results.png')
+# plt.show() # Odkomentujte ak bežíte lokálne s GUI
+print("Plot saved to imputation_test_results.png")
