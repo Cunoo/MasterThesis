@@ -4,5 +4,6 @@ models/
 
 __pycache__/
 data/*.npy
-data/pivot_data_imputedExcel.xlsx
+data/pivot_data_imputed.xlsx
+data/pivot_data_imputed.parquet
 images/
