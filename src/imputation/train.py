@@ -146,7 +146,7 @@ scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=5, fa
 
 # Denoising training parameters
 denoise_rate = 0.3       # probability of artificially masking known targets at last step
-epochs = 5
+epochs = 25
 patience = 10
 min_delta = 1e-6
 

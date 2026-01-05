@@ -37,8 +37,7 @@ def remove_outliers_iqr(df, factor=1.5):
 def prepare_data(filepath, seq_len, scaler=None, fit_scaler: bool = True, impute_mode: bool = False, verbose: bool = True):
     df = pd.read_parquet(filepath)
     df = df.replace([np.inf, -np.inf], np.nan)
-    df = remove_outliers_iqr(df, factor=1.5)
-
+    #df = remove_outliers_iqr(df.copy(), factor=1.5)
     # Časové features
     time_index = pd.to_datetime(df.index)
     day_of_year = time_index.dayofyear.to_numpy()
@@ -47,7 +46,13 @@ def prepare_data(filepath, seq_len, scaler=None, fit_scaler: bool = True, impute
     df["cos_doy"] = np.cos(2 * np.pi * day_of_year / 365.0)
     df["sin_hour"] = np.sin(2 * np.pi * hour_of_day / 24.0)
     df["cos_hour"] = np.cos(2 * np.pi * hour_of_day / 24.0)
-
+    
+    df_model = df.copy()
+    df_stats = remove_outliers_iqr(df.copy(), factor=1.5)
+    clipped_mask = df_model != df_stats
+    df_model[clipped_mask] = np.nan
+    df = df_model
+    
     # Mask = kde sú NaN
     mask = df.isna().astype(int)
     values = df.to_numpy(dtype=float)
