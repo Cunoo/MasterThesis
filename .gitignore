@@ -7,3 +7,6 @@ data/*.npy
 data/pivot_data_imputed.xlsx
 data/pivot_data_imputed.parquet
 images/
+
+.DS_Store
+src/.DS_Store
