@@ -49,6 +49,8 @@ def prepare_data(filepath, seq_len, scaler=None, fit_scaler: bool = True, impute
     
     df_model = df.copy()
     df_stats = remove_outliers_iqr(df.copy(), factor=1.5)
+    
+    #After remove outliers take it and also predict as "imputation"
     clipped_mask = df_model != df_stats
     df_model[clipped_mask] = np.nan
     df = df_model
