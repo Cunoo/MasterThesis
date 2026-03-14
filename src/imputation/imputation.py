@@ -22,7 +22,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"Using device: {device}")
 input_size = X.shape[2]
 model = GRU_Imputation(input_size=input_size, hidden_size=model_param.hidden_size, num_layers=model_param.num_layers, dropout=model_param.dropout)
-model.load_state_dict(torch.load('models/imputation/imputation_model_gru.pth', map_location=device))
+model.load_state_dict(torch.load('models/imputation/imputation_model_gru_without_attention.pth', map_location=device))
 model = model.to(device)
 model.eval()
 
@@ -126,6 +126,6 @@ plt.title(f'Column: {col_name} - Original vs Imputed Data', fontsize=14, fontwei
 plt.legend(fontsize=11)
 plt.grid(True, alpha=0.3)
 plt.tight_layout()
-plt.savefig('imputation_visualization.png', dpi=100)
-print(f"✓ Visualization saved to: imputation_visualization.png")
+plt.savefig('imputation_visualization_imputation_model_gru_without_attention.png', dpi=100)
+print(f"✓ Visualization saved to: imputation_visualization_imputation_model_gru_without_attention.png")
 plt.show()

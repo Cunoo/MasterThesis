@@ -11,12 +11,14 @@ from dataset import ImputationDataset
 from torch.utils.data import DataLoader
 from sklearn.metrics import root_mean_squared_error, mean_absolute_error, r2_score
 import model_param as model_param
+from test_log import append_test_log, TEST_LOG_PATH
 
 # Nastavenia
 SEQ_LEN = model_param.SEQ_LEN
 ART_RATE = 0.15  # Pomer umelo maskovaných hodnôt pre test presnosti
 torch.manual_seed(42) # Fixný seed pre reprodukovateľnosť testu
 np.random.seed(42)
+EXCLUDED_FEATURES = {"sin_doy", "cos_doy", "sin_hour", "cos_hour"}
 
 # 1. Načítanie dát
 print("Loading data and preparing sequences...")
@@ -38,9 +40,9 @@ X, M, y, target_masks, _, mask, df, seq_to_orig_idx = prepare_data(
 # 2. Inicializácia a načítanie modelu
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 input_size = X.shape[2]
-model = GRU_Imputation(input_size=input_size, hidden_size=model_param.hidden_size, num_layers=model_param.num_layers, dropout=model_param.dropout)
+model = GRU_Imputation(input_size=input_size, hidden_size=model_param.hidden_size, dropout=model_param.dropout)
 
-model_path = 'models/imputation/imputation_model_gru.pth'
+model_path = 'models/imputation/imputation_model_gru_without_attention.pth'
 if os.path.exists(model_path):
     model.load_state_dict(torch.load(model_path, map_location=device))
     print(f"Model loaded from {model_path}")
@@ -111,6 +113,9 @@ print("-" * 60)
 
 results = []
 for col, feature_name in enumerate(df.columns):
+    if feature_name in EXCLUDED_FEATURES:
+        continue
+
     col_mask = flags_art[:, col] == 1
     if not np.any(col_mask):
         continue
@@ -127,10 +132,21 @@ for col, feature_name in enumerate(df.columns):
 
 # Uloženie metrík do súboru
 metrics_df = pd.DataFrame(results)
-metrics_df.to_csv("gru_metrics_real_units.txt", sep="\t", index=False)
+metrics_df = metrics_df[~metrics_df["Feature"].isin(EXCLUDED_FEATURES)].reset_index(drop=True)
+append_test_log(
+    log_path=TEST_LOG_PATH,
+    model_name=model.__class__.__name__,
+    model_file=os.path.basename(model_path),
+    metrics_df=metrics_df,
+)
+print(f"Test log saved to {TEST_LOG_PATH}")
+
 print("="*60)
-print(f"Average R2 Score: {metrics_df['R2'].mean():.4f}")
-print("Saved metrics to gru_metrics_real_units.txt")
+if not metrics_df.empty:
+    print(f"Average R2 Score: {metrics_df['R2'].mean():.4f}")
+else:
+    print("Average R2 Score: N/A (no features after exclusion)")
+print("Saved metrics to gru_metrics_real_units_imputation_model_gru_without_attention.txt")
 
 # 7. Vizualizácia výsledkov
 # Vyberieme 3 zaujímavé stĺpce (nie časové features na konci)
@@ -161,6 +177,6 @@ for i, col in enumerate(cols_to_plot):
     plt.grid(True, alpha=0.3)
 
 plt.suptitle('Model Performance on Artificially Masked Data (Real Units)', fontsize=16)
-plt.savefig('imputation_test_results.png')
+plt.savefig('imputation_test_results_imputation_model_gru_without_attention.png')
 # plt.show() # Odkomentujte ak bežíte lokálne s GUI
-print("Plot saved to imputation_test_results.png")
+print("Plot saved to imputation_test_results_imputation_model_gru_without_attention.png")

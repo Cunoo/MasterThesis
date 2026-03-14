@@ -1,3 +1,4 @@
+from datetime import datetime
 import random
 from matplotlib import pyplot as plt
 import pandas as pd
@@ -17,6 +18,9 @@ import pickle
 os.makedirs("models", exist_ok=True)
 os.makedirs(os.path.join("models", "imputation"), exist_ok=True)
 
+
+
+
 # Reproducible seeds
 random.seed(42)
 np.random.seed(42)
@@ -28,6 +32,33 @@ SEQ_LEN = model_param.SEQ_LEN
 X, M, y, target_masks, scaler, mask, df, seq_to_orig_idx = prepare_data(
     "data/pivot_train.parquet", SEQ_LEN, fit_scaler=True, verbose=True
 )
+
+os.makedirs("models", exist_ok=True)
+os.makedirs(os.path.join("models", "imputation"), exist_ok=True)
+
+LOG_PATH = os.path.join("models", "imputation", "training_log.txt")
+
+
+def append_training_log(
+    log_path: str,
+    model_name: str,
+    model_file: str,
+    epoch: int,
+    train_loss: float,
+    val_loss: float,
+    lr: float,
+    best_loss: float,
+) -> None:
+    os.makedirs(os.path.dirname(log_path), exist_ok=True)
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(log_path, "a", encoding="utf-8") as f:
+        f.write(
+            f"[{ts}] model={model_name} file={model_file} "
+            f"epoch={epoch} train_loss={train_loss:.6f} val_loss={val_loss:.6f} "
+            f"lr={lr:.8f} best_val={best_loss:.6f}\n"
+        )
+
+
 
 # Persist scaler fitted on TRAIN only (used later in test.py to avoid leakage)
 with open(os.path.join("models", "imputation", "scaler.pkl"), "wb") as f:
@@ -115,7 +146,7 @@ print(f"Percentage missing in M_train: {(M_train == 1).sum() / M_train.size * 10
 
 # Initialize model
 input_size = X.shape[2]  # Number of features
-model = GRU_Imputation(input_size=input_size, hidden_size=model_param.hidden_size, num_layers=model_param.num_layers, dropout=model_param.dropout)
+model = GRU_Imputation(input_size=input_size, hidden_size=model_param.hidden_size, dropout=model_param.dropout)
 
 # Device setup
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -192,12 +223,23 @@ def build_val_art_masks(val_loader: DataLoader, denoise_rate: float, seed: int =
 val_art_masks = build_val_art_masks(val_loader, denoise_rate=denoise_rate, seed=42)
 def train_model(
     model, train_loader, val_loader, criterion, optimizer, scheduler,
-    device, epochs, patience, min_delta, model_path='models/imputation/imputation_model_gru.pth', val_art_masks=val_art_masks
+    device, epochs, patience, min_delta, model_path='models/imputation/imputation_model_only_attention.pth', val_art_masks=val_art_masks,log_path=LOG_PATH,
 ):
     os.makedirs(os.path.dirname(model_path), exist_ok=True)
     best_loss = float('inf')
     patience_counter = 0
     train_losses, val_losses, lrs = [], [], []
+    
+    model_name = model.__class__.__name__
+    model_file = os.path.basename(model_path)
+    
+    if os.path.exists(log_path) and os.path.getsize(log_path) > 0:
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write("\n")
+    with open(log_path, "a", encoding="utf-8") as f:
+        f.write(f"=== NEW RUN | model={model_name} | file={model_file} ===\n")
+
+
 
     for epoch in range(epochs):
         model.train()
@@ -289,6 +331,17 @@ def train_model(
         train_losses.append(avg_train)
         val_losses.append(avg_val)
         lrs.append(lr)
+        
+        append_training_log(
+            log_path=log_path,
+            model_name=model_name,
+            model_file=model_file,
+            epoch=epoch + 1,
+            train_loss=avg_train,
+            val_loss=avg_val,
+            lr=lr,
+            best_loss=best_loss,
+        )
 
         if patience_counter >= patience or lr < 1e-7:
             print("Early stopping.")
@@ -298,7 +351,7 @@ def train_model(
 
 train_losses, val_losses, learning_rates, best_loss = train_model(
     model, train_loader, val_loader, criterion, optimizer, scheduler,
-    device, epochs, patience, min_delta, val_art_masks=val_art_masks
+    device, epochs, patience, min_delta, val_art_masks=val_art_masks, log_path=LOG_PATH
 )
 
 # Plot loss curves
@@ -307,8 +360,8 @@ plt.plot(train_losses, label='Train')
 plt.plot(val_losses, label='Val')
 plt.xlabel('Epoch')
 plt.ylabel('Loss')
-plt.title('Loss curves (denoising)')
+plt.title('Loss curves')
 plt.legend()
 plt.tight_layout()
-plt.savefig('loss_curve.png', dpi=150)
+plt.savefig('loss_curve_only_attention.png', dpi=150)
 print("Done. Best val loss:", best_loss)
