@@ -1,6 +1,5 @@
 venv/
 
-models/
 
 __pycache__/
 data/*.npy
