@@ -1,0 +1,76 @@
+column,train_n,eval_n,rmse,mae,r2,model_path
+SSA 3 Lysimeter UMP 120cm %,273300,68373,0.5449165989641395,0.3410577762965564,0.9915472879709987,models/imputation/random_Forest\rf_SSA_3_Lysimeter_UMP_120cm_.joblib
+SSA 3 Lysimeter UMP 30cm %,273914,68515,1.4953610788583431,0.8934419297561808,0.9690478784541858,models/imputation/random_Forest\rf_SSA_3_Lysimeter_UMP_30cm_.joblib
+SSA 3 Lysimeter UMP 75cm %,273300,68373,0.8459962896665509,0.5005801330907582,0.9818121204259137,models/imputation/random_Forest\rf_SSA_3_Lysimeter_UMP_75cm_.joblib
+SSA 3 Lysimeter battery V,273300,68373,0.07782710771412452,0.04494529706229468,0.9848619391296957,models/imputation/random_Forest\rf_SSA_3_Lysimeter_battery_V.joblib
+SSA 3 Lysimeter ec 120cm mS/cm,273300,68373,0.0037928575923125356,0.0023451225893291305,0.9664371278248912,models/imputation/random_Forest\rf_SSA_3_Lysimeter_ec_120cm_mS_cm.joblib
+SSA 3 Lysimeter ec 30cm mS/cm,273300,68373,0.009534316629536374,0.006928532192362278,0.8075910720148712,models/imputation/random_Forest\rf_SSA_3_Lysimeter_ec_30cm_mS_cm.joblib
+SSA 3 Lysimeter ec 75cm mS/cm,273300,68373,0.005712381008647844,0.003658951578548526,0.921884915170281,models/imputation/random_Forest\rf_SSA_3_Lysimeter_ec_75cm_mS_cm.joblib
+SSA 3 Lysimeter scale (1) kg,273300,68373,28.470279555274878,12.305338436487675,0.8781293991680547,models/imputation/random_Forest\rf_SSA_3_Lysimeter_scale_1_kg.joblib
+SSA 3 Lysimeter temperature 120cm degC,273300,68373,0.17868453864488515,0.1270874718925911,0.9990155379633908,models/imputation/random_Forest\rf_SSA_3_Lysimeter_temperature_120cm_degC.joblib
+SSA 3 Lysimeter temperature 30cm degC,273300,68373,0.5481598839673445,0.4002307032478423,0.9946970075530502,models/imputation/random_Forest\rf_SSA_3_Lysimeter_temperature_30cm_degC.joblib
+SSA 3 Lysimeter temperature 75cm degC,273300,68373,0.29758343052497543,0.19934442048601794,0.9978703615481161,models/imputation/random_Forest\rf_SSA_3_Lysimeter_temperature_75cm_degC.joblib
+SSA 3 Lysimeter tension 120cm kPa,273914,68515,3.560693702571837,1.9170284792099956,0.91148611192323,models/imputation/random_Forest\rf_SSA_3_Lysimeter_tension_120cm_kPa.joblib
+SSA 3 Lysimeter tension 30cm kPa,273914,68515,0.4910759072989534,0.2841774854558551,0.9288137889471898,models/imputation/random_Forest\rf_SSA_3_Lysimeter_tension_30cm_kPa.joblib
+SSA 3 Lysimeter tension 75cm kPa,273914,68515,1.8276999884049858,0.9096961505725136,0.9819129332062553,models/imputation/random_Forest\rf_SSA_3_Lysimeter_tension_75cm_kPa.joblib
+SSA 3 Lysimeter vacuum 120cm kPa,273914,68515,1.4344486619315884,0.5417989690065571,0.9842148891132007,models/imputation/random_Forest\rf_SSA_3_Lysimeter_vacuum_120cm_kPa.joblib
+SSA 3 Lysimeter vacuum 30cm kPa,273914,68515,0.15507514715858592,0.0738728842822571,0.9230798940285766,models/imputation/random_Forest\rf_SSA_3_Lysimeter_vacuum_30cm_kPa.joblib
+SSA 3 Lysimeter vacuum 75cm kPa,273914,68515,2.410556925595261,1.2384536897585525,0.9812566318245649,models/imputation/random_Forest\rf_SSA_3_Lysimeter_vacuum_75cm_kPa.joblib
+SSA 4 Schacht UMP (1) 120cm %,276942,69258,0.7236086049630092,0.361020501334888,0.9983415074575955,models/imputation/random_Forest\rf_SSA_4_Schacht_UMP_1_120cm_.joblib
+SSA 4 Schacht UMP (1) 30cm %,276942,69258,1.0283706571034017,0.6675674358919195,0.952054257109446,models/imputation/random_Forest\rf_SSA_4_Schacht_UMP_1_30cm_.joblib
+SSA 4 Schacht UMP (1) 75cm %,276942,69258,0.6058826660690594,0.38816237278567933,0.9923968285262625,models/imputation/random_Forest\rf_SSA_4_Schacht_UMP_1_75cm_.joblib
+SSA 4 Schacht UMP (2) 120cm %,276942,69258,0.8388841156139806,0.5410767741831749,0.9931886085841715,models/imputation/random_Forest\rf_SSA_4_Schacht_UMP_2_120cm_.joblib
+SSA 4 Schacht UMP (2) 30cm %,276942,69258,0.8167126722527093,0.540235460713074,0.9907631856592443,models/imputation/random_Forest\rf_SSA_4_Schacht_UMP_2_30cm_.joblib
+SSA 4 Schacht UMP (2) 75cm %,276942,69258,0.8530628534643392,0.49326040761386714,0.9869572898406245,models/imputation/random_Forest\rf_SSA_4_Schacht_UMP_2_75cm_.joblib
+SSA 4 Schacht UMP (3) 120cm %,276942,69258,0.756212852203087,0.4511532826907248,0.9949676118783866,models/imputation/random_Forest\rf_SSA_4_Schacht_UMP_3_120cm_.joblib
+SSA 4 Schacht UMP (3) 30cm %,276942,69258,2.0174311347711633,1.1490168038205988,0.949418103013582,models/imputation/random_Forest\rf_SSA_4_Schacht_UMP_3_30cm_.joblib
+SSA 4 Schacht UMP (3) 75cm %,276942,69258,0.41884457298160405,0.2590798658240016,0.995360575850036,models/imputation/random_Forest\rf_SSA_4_Schacht_UMP_3_75cm_.joblib
+SSA 4 Schacht battery V,276942,69258,0.08814019498518397,0.050108782260758246,0.9803976868154881,models/imputation/random_Forest\rf_SSA_4_Schacht_battery_V.joblib
+SSA 4 Schacht discharge (1) l,276942,69258,0.0,0.0,1.0,models/imputation/random_Forest\rf_SSA_4_Schacht_discharge_1_l.joblib
+SSA 4 Schacht discharge (2) l,276942,69258,0.0,0.0,1.0,models/imputation/random_Forest\rf_SSA_4_Schacht_discharge_2_l.joblib
+SSA 4 Schacht discharge (3) l,276942,69258,0.0,0.0,1.0,models/imputation/random_Forest\rf_SSA_4_Schacht_discharge_3_l.joblib
+SSA 4 Schacht ec (1) 120cm mS/cm,276942,69258,0.008377466598188865,0.00526326170856652,0.9812452534592117,models/imputation/random_Forest\rf_SSA_4_Schacht_ec_1_120cm_mS_cm.joblib
+SSA 4 Schacht ec (1) 30cm mS/cm,276942,69258,0.008061804113750005,0.005772181179179431,0.9249172142705189,models/imputation/random_Forest\rf_SSA_4_Schacht_ec_1_30cm_mS_cm.joblib
+SSA 4 Schacht ec (1) 75cm mS/cm,276942,69258,0.004828311707598722,0.003281975255350391,0.9634296201512601,models/imputation/random_Forest\rf_SSA_4_Schacht_ec_1_75cm_mS_cm.joblib
+SSA 4 Schacht ec (2) 120cm mS/cm,276942,69258,0.009508824880376712,0.005595326305826777,0.9739939554735368,models/imputation/random_Forest\rf_SSA_4_Schacht_ec_2_120cm_mS_cm.joblib
+SSA 4 Schacht ec (2) 30cm mS/cm,276942,69258,0.009584515014071184,0.006156937636132812,0.9688663469220641,models/imputation/random_Forest\rf_SSA_4_Schacht_ec_2_30cm_mS_cm.joblib
+SSA 4 Schacht ec (2) 75cm mS/cm,276942,69258,0.004338979751194992,0.002433449729545633,0.9873658237666335,models/imputation/random_Forest\rf_SSA_4_Schacht_ec_2_75cm_mS_cm.joblib
+SSA 4 Schacht ec (3) 120cm mS/cm,276942,69258,0.008166144657950961,0.005223449221584462,0.9809532015695591,models/imputation/random_Forest\rf_SSA_4_Schacht_ec_3_120cm_mS_cm.joblib
+SSA 4 Schacht ec (3) 30cm mS/cm,276942,69258,0.007329105862803878,0.004483470151794292,0.9737741994955174,models/imputation/random_Forest\rf_SSA_4_Schacht_ec_3_30cm_mS_cm.joblib
+SSA 4 Schacht ec (3) 75cm mS/cm,276942,69258,0.004121134164122621,0.002634942731383819,0.9615404042537361,models/imputation/random_Forest\rf_SSA_4_Schacht_ec_3_75cm_mS_cm.joblib
+SSA 4 Schacht temperature (1) 120cm degC,276942,69258,0.1807963216495481,0.13646599436968299,0.9997627973115116,models/imputation/random_Forest\rf_SSA_4_Schacht_temperature_1_120cm_degC.joblib
+SSA 4 Schacht temperature (1) 30cm degC,276942,69258,0.3864189206545267,0.275530610332853,0.9973309212166188,models/imputation/random_Forest\rf_SSA_4_Schacht_temperature_1_30cm_degC.joblib
+SSA 4 Schacht temperature (1) 75cm degC,276942,69258,0.23512789184178332,0.1749813891628532,0.9987680919826686,models/imputation/random_Forest\rf_SSA_4_Schacht_temperature_1_75cm_degC.joblib
+SSA 4 Schacht temperature (2) 120cm degC,276942,69258,0.32652252409129473,0.23377221628474756,0.9963360380801346,models/imputation/random_Forest\rf_SSA_4_Schacht_temperature_2_120cm_degC.joblib
+SSA 4 Schacht temperature (2) 30cm degC,276942,69258,0.432286689022436,0.3127664410151214,0.9988345098756883,models/imputation/random_Forest\rf_SSA_4_Schacht_temperature_2_30cm_degC.joblib
+SSA 4 Schacht temperature (2) 75cm degC,276942,69258,0.2163649122665479,0.16459697990201488,0.9989696572700164,models/imputation/random_Forest\rf_SSA_4_Schacht_temperature_2_75cm_degC.joblib
+SSA 4 Schacht temperature (3) 120cm degC,276942,69258,0.26839165014814337,0.19260148608637814,0.9978455179330827,models/imputation/random_Forest\rf_SSA_4_Schacht_temperature_3_120cm_degC.joblib
+SSA 4 Schacht temperature (3) 30cm degC,276942,69258,1.238065150664155,0.5359945489249077,0.9828450557936166,models/imputation/random_Forest\rf_SSA_4_Schacht_temperature_3_30cm_degC.joblib
+SSA 4 Schacht temperature (3) 75cm degC,276942,69258,0.23641103496939458,0.17917219220672154,0.9986221127678755,models/imputation/random_Forest\rf_SSA_4_Schacht_temperature_3_75cm_degC.joblib
+SSA 4 Schacht vacuum 120cm kPa,276942,69258,4.188110016099954,2.486179467603585,0.910419553371222,models/imputation/random_Forest\rf_SSA_4_Schacht_vacuum_120cm_kPa.joblib
+SSA 4 Schacht vacuum 140cm kPa,276942,69258,2.781799863541765,1.340770829500669,0.9101915881687843,models/imputation/random_Forest\rf_SSA_4_Schacht_vacuum_140cm_kPa.joblib
+SSA 4 Schacht vacuum 30cm kPa,276942,69258,4.399806857188598,2.5465165158274448,0.9035423009409418,models/imputation/random_Forest\rf_SSA_4_Schacht_vacuum_30cm_kPa.joblib
+SSA 4 Schacht vacuum 75cm kPa,276942,69258,4.682217668428448,3.0860472956244265,0.8633675790480123,models/imputation/random_Forest\rf_SSA_4_Schacht_vacuum_75cm_kPa.joblib
+URB Lysimeter discharge (1) l,287566,71888,0.0,0.0,1.0,models/imputation/random_Forest\rf_URB_Lysimeter_discharge_1_l.joblib
+URB Lysimeter inside temperature degC,287566,71888,0.2815319012897481,0.211956822133631,0.9975013063684347,models/imputation/random_Forest\rf_URB_Lysimeter_inside_temperature_degC.joblib
+URB Lysimeter inside tension kPa,287566,71888,2.5569556661093102,1.4330648172421623,0.9296544675293844,models/imputation/random_Forest\rf_URB_Lysimeter_inside_tension_kPa.joblib
+URB Lysimeter level cm,287566,71888,5.848509011784248,3.2002379991320637,0.9691768783244658,models/imputation/random_Forest\rf_URB_Lysimeter_level_cm.joblib
+URB Lysimeter level reference cm,287566,71888,0.25593590360542895,0.07075545067681376,0.9745848979370999,models/imputation/random_Forest\rf_URB_Lysimeter_level_reference_cm.joblib
+URB Lysimeter outside temperature degC,287566,71888,0.19070717639272464,0.13801738753194634,0.9988446849242905,models/imputation/random_Forest\rf_URB_Lysimeter_outside_temperature_degC.joblib
+URB Lysimeter outside tension kPa,287566,71888,1.4923240687900383,0.6593914400484577,0.9937712768093308,models/imputation/random_Forest\rf_URB_Lysimeter_outside_tension_kPa.joblib
+URB Lysimeter outside tension reference kPa,287566,71888,4.11373933721665,1.6045556036360653,0.9745145529974159,models/imputation/random_Forest\rf_URB_Lysimeter_outside_tension_reference_kPa.joblib
+URB Lysimeter percolation pump mV,287566,71888,2.2955271281834184,0.8692624020476808,0.9369062224645548,models/imputation/random_Forest\rf_URB_Lysimeter_percolation_pump_mV.joblib
+URB Lysimeter temperature control mV,287566,71888,2.3570671506967265,1.0012866386344272,0.9184178991814167,models/imputation/random_Forest\rf_URB_Lysimeter_temperature_control_mV.joblib
+URB Lysimeter vacuum kPa,287566,71888,2.2011096553739766,1.0554889218384196,0.9874640407323666,models/imputation/random_Forest\rf_URB_Lysimeter_vacuum_kPa.joblib
+Weather Station UMP (1) %,294299,73544,1.418743194332433,0.9490060385331874,0.9452034967259185,models/imputation/random_Forest\rf_Weather_Station_UMP_1_.joblib
+Weather Station UMP (1) ec mS/cm,294299,73544,0.011154545977156632,0.007564706580622188,0.8423185327027234,models/imputation/random_Forest\rf_Weather_Station_UMP_1_ec_mS_cm.joblib
+Weather Station UMP (1) temperature degC,294299,73544,0.36622497147719174,0.23676020366311887,0.9938168408751997,models/imputation/random_Forest\rf_Weather_Station_UMP_1_temperature_degC.joblib
+Weather Station air pressure hPa,294299,73544,5.354254775272691,4.051632305166725,0.48664764401079896,models/imputation/random_Forest\rf_Weather_Station_air_pressure_hPa.joblib
+Weather Station air temperature degC,294299,73544,1.5563368339036692,1.141772092453151,0.9715321381689271,models/imputation/random_Forest\rf_Weather_Station_air_temperature_degC.joblib
+Weather Station battery V,294299,73544,0.17347847547777262,0.11665826468386263,0.9165563866494649,models/imputation/random_Forest\rf_Weather_Station_battery_V.joblib
+Weather Station humidity %,294299,73544,9.641712112788994,7.567193056640247,0.7409729807421626,models/imputation/random_Forest\rf_Weather_Station_humidity_.joblib
+Weather Station precipitation mm,294299,73544,0.0,0.0,1.0,models/imputation/random_Forest\rf_Weather_Station_precipitation_mm.joblib
+Weather Station radiation W/qm,294299,73544,59.92936258534769,35.912796254772104,0.9113705435827247,models/imputation/random_Forest\rf_Weather_Station_radiation_W_qm.joblib
+Weather Station temperature (5+) degC,294299,73544,1.4490539295752825,1.0350851296493595,0.9772873977715081,models/imputation/random_Forest\rf_Weather_Station_temperature_5_degC.joblib
+Weather Station wind direction deg,294299,73544,110.83615508242198,94.39662310362719,0.14996220542444783,models/imputation/random_Forest\rf_Weather_Station_wind_direction_deg.joblib
+Weather Station wind speed m/s,294299,73544,1.1436018068491804,0.8612634919786052,0.44403852460738247,models/imputation/random_Forest\rf_Weather_Station_wind_speed_m_s.joblib
