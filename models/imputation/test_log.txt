@@ -1,85 +1,4 @@
-=== TEST RUN [2026-03-14 20:59:10] | model=GRU_Imputation | file=imputation_model_gru_with_attention.pth ===
-Feature                             | RMSE       | MAE        | R2        
-------------------------------------------------------------------------
-SSA 3 Lysimeter UMP 120cm %         |     1.0429 |     0.5458 |     0.9678
-SSA 3 Lysimeter UMP 30cm %          |     1.1306 |     0.4792 |     0.9813
-SSA 3 Lysimeter UMP 75cm %          |     0.6951 |     0.3814 |     0.9870
-SSA 3 Lysimeter battery V           |     0.1366 |     0.0845 |     0.9525
-SSA 3 Lysimeter ec 120cm mS/cm      |     0.0044 |     0.0026 |     0.9542
-SSA 3 Lysimeter ec 30cm mS/cm       |     0.0085 |     0.0058 |     0.8220
-SSA 3 Lysimeter ec 75cm mS/cm       |     0.0049 |     0.0031 |     0.9053
-SSA 3 Lysimeter scale (1) kg        |    11.1285 |     5.0398 |     0.9783
-SSA 3 Lysimeter temperature 120cm d |     0.3697 |     0.1988 |     0.9956
-SSA 3 Lysimeter temperature 30cm de |     0.5787 |     0.4068 |     0.9938
-SSA 3 Lysimeter temperature 75cm de |     0.3829 |     0.2237 |     0.9963
-SSA 3 Lysimeter tension 120cm kPa   |     1.4044 |     0.7348 |     0.9774
-SSA 3 Lysimeter tension 30cm kPa    |     0.2433 |     0.1288 |     0.9398
-SSA 3 Lysimeter tension 75cm kPa    |     1.5577 |     0.6494 |     0.9798
-SSA 3 Lysimeter vacuum 120cm kPa    |     1.5448 |     0.5805 |     0.9601
-SSA 3 Lysimeter vacuum 30cm kPa     |     0.1051 |     0.0401 |     0.8066
-SSA 3 Lysimeter vacuum 75cm kPa     |     2.0221 |     1.1095 |     0.9809
-SSA 4 Schacht UMP (1) 120cm %       |    10.3961 |     4.7515 |     0.6457
-SSA 4 Schacht UMP (1) 30cm %        |     0.8766 |     0.4296 |     0.9637
-SSA 4 Schacht UMP (1) 75cm %        |     1.7503 |     0.7963 |     0.9333
-SSA 4 Schacht UMP (2) 120cm %       |     1.4756 |     0.7555 |     0.9773
-SSA 4 Schacht UMP (2) 30cm %        |     0.6817 |     0.3083 |     0.9792
-SSA 4 Schacht UMP (2) 75cm %        |     0.8441 |     0.4290 |     0.9863
-SSA 4 Schacht UMP (3) 120cm %       |     1.4213 |     0.7077 |     0.9806
-SSA 4 Schacht UMP (3) 30cm %        |     1.4986 |     0.6022 |     0.9629
-SSA 4 Schacht UMP (3) 75cm %        |     1.1772 |     0.5721 |     0.9606
-SSA 4 Schacht battery V             |     0.1618 |     0.1080 |     0.9322
-SSA 4 Schacht discharge (1) l       |     0.0002 |     0.0002 |     0.0000
-SSA 4 Schacht discharge (2) l       |     0.0020 |     0.0016 |     0.0000
-SSA 4 Schacht discharge (3) l       |     0.0000 |     0.0000 |     0.0000
-SSA 4 Schacht ec (1) 120cm mS/cm    |     0.0281 |     0.0139 |     0.7822
-SSA 4 Schacht ec (1) 30cm mS/cm     |     0.0061 |     0.0040 |     0.9483
-SSA 4 Schacht ec (1) 75cm mS/cm     |     0.0055 |     0.0033 |     0.9447
-SSA 4 Schacht ec (2) 120cm mS/cm    |     0.0089 |     0.0044 |     0.9757
-SSA 4 Schacht ec (2) 30cm mS/cm     |     0.0227 |     0.0112 |     0.7905
-SSA 4 Schacht ec (2) 75cm mS/cm     |     0.0051 |     0.0025 |     0.9807
-SSA 4 Schacht ec (3) 120cm mS/cm    |     0.0145 |     0.0073 |     0.9341
-SSA 4 Schacht ec (3) 30cm mS/cm     |     0.0084 |     0.0037 |     0.9435
-SSA 4 Schacht ec (3) 75cm mS/cm     |     0.0035 |     0.0022 |     0.9690
-SSA 4 Schacht temperature (1) 120cm |     0.2977 |     0.1128 |     0.9970
-SSA 4 Schacht temperature (1) 30cm  |     1.1697 |     0.4332 |     0.9733
-SSA 4 Schacht temperature (1) 75cm  |     0.5097 |     0.2648 |     0.9938
-SSA 4 Schacht temperature (2) 120cm |     0.4270 |     0.2517 |     0.9932
-SSA 4 Schacht temperature (2) 30cm  |     0.4645 |     0.3275 |     0.9960
-SSA 4 Schacht temperature (2) 75cm  |     0.5366 |     0.2794 |     0.9931
-SSA 4 Schacht temperature (3) 120cm |     0.7509 |     0.3934 |     0.9817
-SSA 4 Schacht temperature (3) 30cm  |     1.6410 |     0.4961 |     0.9502
-SSA 4 Schacht temperature (3) 75cm  |     0.5344 |     0.2718 |     0.9924
-SSA 4 Schacht vacuum 120cm kPa      |     3.7152 |     2.2093 |     0.9249
-SSA 4 Schacht vacuum 140cm kPa      |     2.3507 |     1.1714 |     0.9320
-SSA 4 Schacht vacuum 30cm kPa       |     5.9100 |     3.1809 |     0.8149
-SSA 4 Schacht vacuum 75cm kPa       |     5.7387 |     3.5931 |     0.7782
-URB Lysimeter discharge (1) l       |     0.0007 |     0.0006 |     0.0000
-URB Lysimeter inside temperature de |     0.4209 |     0.2514 |     0.9945
-URB Lysimeter inside tension kPa    |     1.0723 |     0.6060 |     0.9850
-URB Lysimeter level cm              |     4.1619 |     2.0148 |     0.9845
-URB Lysimeter level reference cm    |     0.2898 |     0.1118 |     0.9252
-URB Lysimeter outside temperature d |     0.5038 |     0.2647 |     0.9919
-URB Lysimeter outside tension kPa   |     4.4950 |     2.3418 |     0.9335
-URB Lysimeter outside tension refer |     5.6712 |     3.1230 |     0.9496
-URB Lysimeter percolation pump mV   |     1.2461 |     0.7568 |     0.9557
-URB Lysimeter temperature control m |     1.2884 |     0.7930 |     0.9541
-URB Lysimeter vacuum kPa            |     2.5960 |     1.2849 |     0.9813
-Weather Station UMP (1) %           |     0.8788 |     0.3929 |     0.9786
-Weather Station UMP (1) ec mS/cm    |     0.0042 |     0.0024 |     0.9572
-Weather Station UMP (1) temperature |     0.4063 |     0.2575 |     0.9922
-Weather Station air pressure hPa    |     1.2474 |     0.8528 |     0.9675
-Weather Station air temperature deg |     1.7425 |     1.1639 |     0.9645
-Weather Station battery V           |     0.2381 |     0.1470 |     0.8427
-Weather Station humidity %          |     6.4673 |     4.2262 |     0.8844
-Weather Station precipitation mm    |     0.0001 |     0.0001 |     0.0000
-Weather Station radiation W/qm      |    87.6934 |    49.5881 |     0.6521
-Weather Station temperature (5+) de |     2.2111 |     1.4059 |     0.9468
-Weather Station wind direction deg  |   104.8358 |    61.6503 |     0.2379
-Weather Station wind speed m/s      |     0.7420 |     0.5030 |     0.7165
-------------------------------------------------------------------------
-AVERAGE                             |     3.9334 |     2.1980 |     0.8651
-
-=== TEST RUN [2026-03-14 21:01:11] | model=GRU_Imputation | file=imputation_model_gru_without_attention.pth ===
+=== TEST RUN [2026-03-17 00:03:17] | model=GRU_Imputation | file=imputation_model_only_gru.pth ===
 Feature                             | RMSE       | MAE        | R2        
 ------------------------------------------------------------------------
 SSA 3 Lysimeter UMP 120cm %         |     0.9146 |     0.4768 |     0.9752
@@ -160,7 +79,7 @@ Weather Station wind speed m/s      |     0.7391 |     0.4971 |     0.7188
 ------------------------------------------------------------------------
 AVERAGE                             |     3.7011 |     2.0632 |     0.8721
 
-=== TEST RUN [2026-03-14 21:01:54] | model=GRU_Imputation | file=imputation_model_only_attention.pth ===
+=== TEST RUN [2026-03-17 00:03:58] | model=GRU_Imputation | file=imputation_model_only_attention.pth ===
 Feature                             | RMSE       | MAE        | R2        
 ------------------------------------------------------------------------
 SSA 3 Lysimeter UMP 120cm %         |     0.3653 |     0.2354 |     0.9960
@@ -240,3 +159,84 @@ Weather Station wind direction deg  |   125.5037 |    97.0089 |    -0.0922
 Weather Station wind speed m/s      |     1.3607 |     0.9812 |     0.0469
 ------------------------------------------------------------------------
 AVERAGE                             |     5.2255 |     3.3874 |     0.7953
+
+=== TEST RUN [2026-03-17 00:05:38] | model=GRU_Imputation | file=imputation_model__gru_and_attention.pth ===
+Feature                             | RMSE       | MAE        | R2        
+------------------------------------------------------------------------
+SSA 3 Lysimeter UMP 120cm %         |     1.0429 |     0.5458 |     0.9678
+SSA 3 Lysimeter UMP 30cm %          |     1.1306 |     0.4792 |     0.9813
+SSA 3 Lysimeter UMP 75cm %          |     0.6951 |     0.3814 |     0.9870
+SSA 3 Lysimeter battery V           |     0.1366 |     0.0845 |     0.9525
+SSA 3 Lysimeter ec 120cm mS/cm      |     0.0044 |     0.0026 |     0.9542
+SSA 3 Lysimeter ec 30cm mS/cm       |     0.0085 |     0.0058 |     0.8220
+SSA 3 Lysimeter ec 75cm mS/cm       |     0.0049 |     0.0031 |     0.9053
+SSA 3 Lysimeter scale (1) kg        |    11.1285 |     5.0398 |     0.9783
+SSA 3 Lysimeter temperature 120cm d |     0.3697 |     0.1988 |     0.9956
+SSA 3 Lysimeter temperature 30cm de |     0.5787 |     0.4068 |     0.9938
+SSA 3 Lysimeter temperature 75cm de |     0.3829 |     0.2237 |     0.9963
+SSA 3 Lysimeter tension 120cm kPa   |     1.4044 |     0.7348 |     0.9774
+SSA 3 Lysimeter tension 30cm kPa    |     0.2433 |     0.1288 |     0.9398
+SSA 3 Lysimeter tension 75cm kPa    |     1.5577 |     0.6494 |     0.9798
+SSA 3 Lysimeter vacuum 120cm kPa    |     1.5448 |     0.5805 |     0.9601
+SSA 3 Lysimeter vacuum 30cm kPa     |     0.1051 |     0.0401 |     0.8066
+SSA 3 Lysimeter vacuum 75cm kPa     |     2.0221 |     1.1095 |     0.9809
+SSA 4 Schacht UMP (1) 120cm %       |    10.3961 |     4.7515 |     0.6457
+SSA 4 Schacht UMP (1) 30cm %        |     0.8766 |     0.4296 |     0.9637
+SSA 4 Schacht UMP (1) 75cm %        |     1.7503 |     0.7963 |     0.9333
+SSA 4 Schacht UMP (2) 120cm %       |     1.4756 |     0.7555 |     0.9773
+SSA 4 Schacht UMP (2) 30cm %        |     0.6817 |     0.3083 |     0.9792
+SSA 4 Schacht UMP (2) 75cm %        |     0.8441 |     0.4290 |     0.9863
+SSA 4 Schacht UMP (3) 120cm %       |     1.4213 |     0.7077 |     0.9806
+SSA 4 Schacht UMP (3) 30cm %        |     1.4986 |     0.6022 |     0.9629
+SSA 4 Schacht UMP (3) 75cm %        |     1.1772 |     0.5721 |     0.9606
+SSA 4 Schacht battery V             |     0.1618 |     0.1080 |     0.9322
+SSA 4 Schacht discharge (1) l       |     0.0002 |     0.0002 |     0.0000
+SSA 4 Schacht discharge (2) l       |     0.0020 |     0.0016 |     0.0000
+SSA 4 Schacht discharge (3) l       |     0.0000 |     0.0000 |     0.0000
+SSA 4 Schacht ec (1) 120cm mS/cm    |     0.0281 |     0.0139 |     0.7822
+SSA 4 Schacht ec (1) 30cm mS/cm     |     0.0061 |     0.0040 |     0.9483
+SSA 4 Schacht ec (1) 75cm mS/cm     |     0.0055 |     0.0033 |     0.9447
+SSA 4 Schacht ec (2) 120cm mS/cm    |     0.0089 |     0.0044 |     0.9757
+SSA 4 Schacht ec (2) 30cm mS/cm     |     0.0227 |     0.0112 |     0.7905
+SSA 4 Schacht ec (2) 75cm mS/cm     |     0.0051 |     0.0025 |     0.9807
+SSA 4 Schacht ec (3) 120cm mS/cm    |     0.0145 |     0.0073 |     0.9341
+SSA 4 Schacht ec (3) 30cm mS/cm     |     0.0084 |     0.0037 |     0.9435
+SSA 4 Schacht ec (3) 75cm mS/cm     |     0.0035 |     0.0022 |     0.9690
+SSA 4 Schacht temperature (1) 120cm |     0.2977 |     0.1128 |     0.9970
+SSA 4 Schacht temperature (1) 30cm  |     1.1697 |     0.4332 |     0.9733
+SSA 4 Schacht temperature (1) 75cm  |     0.5097 |     0.2648 |     0.9938
+SSA 4 Schacht temperature (2) 120cm |     0.4270 |     0.2517 |     0.9932
+SSA 4 Schacht temperature (2) 30cm  |     0.4645 |     0.3275 |     0.9960
+SSA 4 Schacht temperature (2) 75cm  |     0.5366 |     0.2794 |     0.9931
+SSA 4 Schacht temperature (3) 120cm |     0.7509 |     0.3934 |     0.9817
+SSA 4 Schacht temperature (3) 30cm  |     1.6410 |     0.4961 |     0.9502
+SSA 4 Schacht temperature (3) 75cm  |     0.5344 |     0.2718 |     0.9924
+SSA 4 Schacht vacuum 120cm kPa      |     3.7152 |     2.2093 |     0.9249
+SSA 4 Schacht vacuum 140cm kPa      |     2.3507 |     1.1714 |     0.9320
+SSA 4 Schacht vacuum 30cm kPa       |     5.9100 |     3.1809 |     0.8149
+SSA 4 Schacht vacuum 75cm kPa       |     5.7387 |     3.5931 |     0.7782
+URB Lysimeter discharge (1) l       |     0.0007 |     0.0006 |     0.0000
+URB Lysimeter inside temperature de |     0.4209 |     0.2514 |     0.9945
+URB Lysimeter inside tension kPa    |     1.0723 |     0.6060 |     0.9850
+URB Lysimeter level cm              |     4.1619 |     2.0148 |     0.9845
+URB Lysimeter level reference cm    |     0.2898 |     0.1118 |     0.9252
+URB Lysimeter outside temperature d |     0.5038 |     0.2647 |     0.9919
+URB Lysimeter outside tension kPa   |     4.4950 |     2.3418 |     0.9335
+URB Lysimeter outside tension refer |     5.6712 |     3.1230 |     0.9496
+URB Lysimeter percolation pump mV   |     1.2461 |     0.7568 |     0.9557
+URB Lysimeter temperature control m |     1.2884 |     0.7930 |     0.9541
+URB Lysimeter vacuum kPa            |     2.5960 |     1.2849 |     0.9813
+Weather Station UMP (1) %           |     0.8788 |     0.3929 |     0.9786
+Weather Station UMP (1) ec mS/cm    |     0.0042 |     0.0024 |     0.9572
+Weather Station UMP (1) temperature |     0.4063 |     0.2575 |     0.9922
+Weather Station air pressure hPa    |     1.2474 |     0.8528 |     0.9675
+Weather Station air temperature deg |     1.7425 |     1.1639 |     0.9645
+Weather Station battery V           |     0.2381 |     0.1470 |     0.8427
+Weather Station humidity %          |     6.4673 |     4.2262 |     0.8844
+Weather Station precipitation mm    |     0.0001 |     0.0001 |     0.0000
+Weather Station radiation W/qm      |    87.6934 |    49.5881 |     0.6521
+Weather Station temperature (5+) de |     2.2111 |     1.4059 |     0.9468
+Weather Station wind direction deg  |   104.8358 |    61.6503 |     0.2379
+Weather Station wind speed m/s      |     0.7420 |     0.5030 |     0.7165
+------------------------------------------------------------------------
+AVERAGE                             |     3.9334 |     2.1980 |     0.8651

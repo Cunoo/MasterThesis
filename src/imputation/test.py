@@ -42,7 +42,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 input_size = X.shape[2]
 model = GRU_Imputation(input_size=input_size, hidden_size=model_param.hidden_size, dropout=model_param.dropout)
 
-model_path = 'models/imputation/imputation_model_gru_without_attention.pth'
+model_path = 'models/imputation/imputation_model__gru_and_attention.pth'
 if os.path.exists(model_path):
     model.load_state_dict(torch.load(model_path, map_location=device))
     print(f"Model loaded from {model_path}")
@@ -146,7 +146,7 @@ if not metrics_df.empty:
     print(f"Average R2 Score: {metrics_df['R2'].mean():.4f}")
 else:
     print("Average R2 Score: N/A (no features after exclusion)")
-print("Saved metrics to gru_metrics_real_units_imputation_model_gru_without_attention.txt")
+print("Saved metrics to gru_metrics_real_units_imputation_model_gru_and_attention.txt")
 
 # 7. Vizualizácia výsledkov
 # Vyberieme 3 zaujímavé stĺpce (nie časové features na konci)
@@ -177,6 +177,6 @@ for i, col in enumerate(cols_to_plot):
     plt.grid(True, alpha=0.3)
 
 plt.suptitle('Model Performance on Artificially Masked Data (Real Units)', fontsize=16)
-plt.savefig('imputation_test_results_imputation_model_gru_without_attention.png')
+plt.savefig('imputation_test_results_imputation_model_gru_and_attention.png')
 # plt.show() # Odkomentujte ak bežíte lokálne s GUI
-print("Plot saved to imputation_test_results_imputation_model_gru_without_attention.png")
+print("Plot saved to imputation_test_results_imputation_model_gru_and_attention.png")
