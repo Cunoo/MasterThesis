@@ -1,29 +1,3 @@
-=== NEW RUN | model=GRU_Imputation | file=imputation_model_only_gru.pth ===
-[2026-03-16 23:19:17] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=1 train_loss=0.007476 val_loss=0.010219 lr=0.00100000 best_val=0.010219
-[2026-03-16 23:19:34] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=2 train_loss=0.005497 val_loss=0.010387 lr=0.00100000 best_val=0.010219
-[2026-03-16 23:19:51] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=3 train_loss=0.005156 val_loss=0.010531 lr=0.00100000 best_val=0.010219
-[2026-03-16 23:20:08] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=4 train_loss=0.004952 val_loss=0.010665 lr=0.00100000 best_val=0.010219
-[2026-03-16 23:20:24] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=5 train_loss=0.004768 val_loss=0.010778 lr=0.00100000 best_val=0.010219
-[2026-03-16 23:20:39] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=6 train_loss=0.004630 val_loss=0.010698 lr=0.00100000 best_val=0.010219
-[2026-03-16 23:20:55] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=7 train_loss=0.004487 val_loss=0.010418 lr=0.00050000 best_val=0.010219
-[2026-03-16 23:21:11] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=8 train_loss=0.004195 val_loss=0.009963 lr=0.00050000 best_val=0.009963
-[2026-03-16 23:21:27] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=9 train_loss=0.004145 val_loss=0.009952 lr=0.00050000 best_val=0.009952
-[2026-03-16 23:21:43] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=10 train_loss=0.004095 val_loss=0.010006 lr=0.00050000 best_val=0.009952
-[2026-03-16 23:21:59] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=11 train_loss=0.004048 val_loss=0.009993 lr=0.00050000 best_val=0.009952
-[2026-03-16 23:22:16] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=12 train_loss=0.004012 val_loss=0.009877 lr=0.00050000 best_val=0.009877
-[2026-03-16 23:22:33] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=13 train_loss=0.003975 val_loss=0.009922 lr=0.00050000 best_val=0.009877
-[2026-03-16 23:22:49] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=14 train_loss=0.003931 val_loss=0.009724 lr=0.00050000 best_val=0.009724
-[2026-03-16 23:23:06] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=15 train_loss=0.003907 val_loss=0.009639 lr=0.00050000 best_val=0.009639
-[2026-03-16 23:23:24] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=16 train_loss=0.003872 val_loss=0.009752 lr=0.00050000 best_val=0.009639
-[2026-03-16 23:23:45] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=17 train_loss=0.003845 val_loss=0.009911 lr=0.00050000 best_val=0.009639
-[2026-03-16 23:24:02] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=18 train_loss=0.003819 val_loss=0.009618 lr=0.00050000 best_val=0.009618
-[2026-03-16 23:24:18] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=19 train_loss=0.003798 val_loss=0.009568 lr=0.00050000 best_val=0.009568
-[2026-03-16 23:24:35] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=20 train_loss=0.003779 val_loss=0.009575 lr=0.00050000 best_val=0.009568
-[2026-03-16 23:24:51] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=21 train_loss=0.003755 val_loss=0.009544 lr=0.00050000 best_val=0.009544
-[2026-03-16 23:25:07] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=22 train_loss=0.003738 val_loss=0.009495 lr=0.00050000 best_val=0.009495
-[2026-03-16 23:25:24] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=23 train_loss=0.003717 val_loss=0.009583 lr=0.00050000 best_val=0.009495
-[2026-03-16 23:25:40] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=24 train_loss=0.003700 val_loss=0.009700 lr=0.00050000 best_val=0.009495
-[2026-03-16 23:25:57] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=25 train_loss=0.003680 val_loss=0.009522 lr=0.00050000 best_val=0.009495
 
 === NEW RUN | model=GRU_Imputation | file=imputation_model_only_gru.pth ===
 [2026-03-16 23:30:18] model=GRU_Imputation file=imputation_model_only_gru.pth epoch=1 train_loss=0.007476 val_loss=0.010219 lr=0.00100000 best_val=0.010219
@@ -78,25 +52,6 @@
 [2026-03-16 23:47:09] model=GRU_Imputation file=imputation_model__gru_and_attention.pth epoch=23 train_loss=0.003606 val_loss=0.010218 lr=0.00025000 best_val=0.010218
 [2026-03-16 23:47:21] model=GRU_Imputation file=imputation_model__gru_and_attention.pth epoch=24 train_loss=0.003597 val_loss=0.010350 lr=0.00025000 best_val=0.010218
 [2026-03-16 23:47:33] model=GRU_Imputation file=imputation_model__gru_and_attention.pth epoch=25 train_loss=0.003584 val_loss=0.010286 lr=0.00025000 best_val=0.010218
-
-=== NEW RUN | model=GRU_Imputation | file=imputation_model_only_attention.pth ===
-[2026-03-16 23:49:56] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=1 train_loss=0.007484 val_loss=0.010573 lr=0.00100000 best_val=0.010573
-[2026-03-16 23:50:08] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=2 train_loss=0.005541 val_loss=0.011190 lr=0.00100000 best_val=0.010573
-[2026-03-16 23:50:19] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=3 train_loss=0.005198 val_loss=0.011201 lr=0.00100000 best_val=0.010573
-[2026-03-16 23:50:31] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=4 train_loss=0.004975 val_loss=0.011080 lr=0.00100000 best_val=0.010573
-[2026-03-16 23:50:42] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=5 train_loss=0.004803 val_loss=0.010628 lr=0.00100000 best_val=0.010573
-[2026-03-16 23:50:54] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=6 train_loss=0.004680 val_loss=0.010254 lr=0.00100000 best_val=0.010254
-[2026-03-16 23:51:05] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=7 train_loss=0.004559 val_loss=0.010620 lr=0.00100000 best_val=0.010254
-[2026-03-16 23:51:17] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=8 train_loss=0.004456 val_loss=0.010309 lr=0.00100000 best_val=0.010254
-[2026-03-16 23:51:28] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=9 train_loss=0.004366 val_loss=0.010532 lr=0.00100000 best_val=0.010254
-[2026-03-16 23:51:40] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=10 train_loss=0.004276 val_loss=0.010621 lr=0.00100000 best_val=0.010254
-[2026-03-16 23:51:51] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=11 train_loss=0.004201 val_loss=0.010488 lr=0.00100000 best_val=0.010254
-[2026-03-16 23:52:03] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=12 train_loss=0.004137 val_loss=0.010696 lr=0.00050000 best_val=0.010254
-[2026-03-16 23:52:14] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=13 train_loss=0.003911 val_loss=0.010535 lr=0.00050000 best_val=0.010254
-[2026-03-16 23:52:26] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=14 train_loss=0.003874 val_loss=0.010252 lr=0.00050000 best_val=0.010252
-[2026-03-16 23:52:37] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=15 train_loss=0.003856 val_loss=0.010600 lr=0.00050000 best_val=0.010252
-[2026-03-16 23:52:49] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=16 train_loss=0.003819 val_loss=0.010477 lr=0.00050000 best_val=0.010252
-[2026-03-16 23:53:00] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=17 train_loss=0.003798 val_loss=0.010537 lr=0.00050000 best_val=0.010252
 
 === NEW RUN | model=GRU_Imputation | file=imputation_model_only_attention.pth ===
 [2026-03-16 23:54:59] model=GRU_Imputation file=imputation_model_only_attention.pth epoch=1 train_loss=0.007558 val_loss=0.008465 lr=0.00100000 best_val=0.008465
