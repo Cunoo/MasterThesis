@@ -1,0 +1,18 @@
+[2026-04-25 13:54:29] Method: linear
+  RMSE_scaled: 0.255152
+  MAE_scaled: 0.071706
+  R2_scaled: 0.930156
+  RMSE_real: 17.843909
+  MAE_real: 1.778596
+  R2_real: 0.997200
+  Avg_R2_per_feature_real: 0.937017
+
+[2026-04-25 13:54:36] Method: forward_fill
+  RMSE_scaled: 0.255152
+  MAE_scaled: 0.071706
+  R2_scaled: 0.930156
+  RMSE_real: 17.843909
+  MAE_real: 1.778596
+  R2_real: 0.997200
+  Avg_R2_per_feature_real: 0.937017
+
