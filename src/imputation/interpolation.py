@@ -1,8 +1,3 @@
-"""
-Kompletný test interpolačného baseline-u
-Porovnáva 4 metódy interpolácie voči GRU modelu a mean baseline-u
-"""
-
 import pandas as pd
 import numpy as np
 import torch
